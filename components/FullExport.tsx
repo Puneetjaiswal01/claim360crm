@@ -11,7 +11,7 @@ export default function FullExport({stage,query}:{stage:string;query:string}){
  if(stage==="__RECENT__")q=q.gte("created_at",new Date(Date.now()-7*86400000).toISOString());else if(stage)q=q.eq("status",stage);
  if(query.trim()){const term=query.trim().replace(/[%(),]/g,"");q=q.or("shareholder_name.ilike.%"+term+"%,ref_id.ilike.%"+term+"%,company.ilike.%"+term+"%,mobile_number.ilike.%"+term+"%,email.ilike.%"+term+"%")}
  const {data,error:e}=await q;if(e)throw new Error(e.message);
- for(const lead of data||[]){const row=lead as Record<string,unknown>;lines.push(columns.map(c=>'"'+String(row[c]??"").replace(/"/g,'""')+'"').join(","))}
+ for(const lead of data||[]){const row=lead as unknown as Record<string,unknown>;lines.push(columns.map(c=>'"'+String(row[c]??"").replace(/"/g,'""')+'"').join(","))}
  if(!data||data.length<500)break;offset+=500;if(offset>=100000)throw new Error("Too many records; apply a filter and try again.");
  }
  const url=URL.createObjectURL(new Blob([String.fromCharCode(65279)+lines.join(String.fromCharCode(13,10))],{type:"text/csv;charset=utf-8"}));

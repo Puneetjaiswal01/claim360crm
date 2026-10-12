@@ -13,7 +13,7 @@ const aliases:Record<string,string>={
 "mobile number":"mobile_number","mobile":"mobile_number","phone":"mobile_number",
 "mobile number type":"mobile_number_type","email":"email","email address":"email",
 "input remarks":"input_remarks","sales remarks":"sales_remarks","remarks":"sales_remarks",
-"status":"status","followup date":"followup_date","follow-up date":"followup_date","fee percent":"fee_percent","fee %":"fee_percent"};
+"status":"status","lead status":"status","call status":"status","current status":"status","sales status":"status","disposition":"status","lead stage":"status","followup date":"followup_date","follow-up date":"followup_date","fee percent":"fee_percent","fee %":"fee_percent"};
 function parseCSV(raw:string):string[][]{
  const out:string[][]=[];let row:string[]=[],field="",quoted=false;
  const text=raw.replace(/^\uFEFF/,"");
@@ -33,13 +33,16 @@ export default function CsvImporter({userId,onImported}:{userId:string;onImporte
  try{const data=parseCSV(await file.text());if(data.length<2)throw new Error("CSV needs a header row and at least one lead.");
  const headers=data[0].map(h=>aliases[h.trim().toLowerCase().replace(/\s+/g," ")]||"");
  if(!headers.includes("shareholder_name"))throw new Error("Missing required column: Shareholder Name(s).");
+ if(!headers.includes("status"))throw new Error("No recognized status column found. To protect individual lead statuses, rename the column to Status, Lead Status, Call Status, Sales Status or Disposition and upload again.");
  const warnings:string[]=[],records:CsvLead[]=[];
  for(let i=1;i<data.length;i++){const raw:Record<string,string>={};headers.forEach((h,j)=>{if(h)raw[h]=(data[i][j]||"").trim()});if(!raw.shareholder_name){if(warnings.length<8)warnings.push("Row "+(i+1)+": missing shareholder name — skipped.");continue}
  const ref=raw.ref_id||"IMPORT-"+Date.now()+"-"+i;
  
- const status=(raw.status||"UNTOUCHED").toUpperCase();
+ const status=(raw.status||"UNTOUCHED").trim().toUpperCase();
+ if(raw.status&&!statusOptions.has(status)){if(warnings.length<12)warnings.push("Row "+(i+1)+": unrecognized status "+JSON.stringify(raw.status)+" — import blocked until statuses are mapped.");}
  records.push({owner_id:userId,ref_id:ref,shareholder_name:raw.shareholder_name,registered_address:raw.registered_address||"",company:raw.company||"",holding_value:raw.holding_value||"",mobile_number:raw.mobile_number||"",mobile_number_type:raw.mobile_number_type||"",email:raw.email||"",input_remarks:raw.input_remarks||"",sales_remarks:raw.sales_remarks||"",status:statusOptions.has(status)?status:"UNTOUCHED",lead_date:dateValue(raw.lead_date||""),followup_date:dateValue(raw.followup_date||""),fee_percent:Number(raw.fee_percent)||12});
  }
+ if(warnings.some(w=>w.includes("import blocked")))throw new Error(warnings.join(" | "));
  if(records.length===0)throw new Error("No valid shareholder rows found.");setRows(records);setIssues(warnings);
  }catch(e){setIssues([e instanceof Error?e.message:"Unable to read CSV file."])}};
  const upload=async()=>{if(!rows.length||busy)return;setBusy(true);setMessage("");setProgress(0);let completed=0;

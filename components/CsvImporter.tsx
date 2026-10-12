@@ -13,7 +13,7 @@ const aliases:Record<string,string>={
 "mobile number":"mobile_number","mobile":"mobile_number","phone":"mobile_number",
 "mobile number type":"mobile_number_type","email":"email","email address":"email",
 "input remarks":"input_remarks","sales remarks":"sales_remarks","remarks":"sales_remarks",
-"status":"status","lead status":"status","call status":"status","current status":"status","sales status":"status","disposition":"status","lead stage":"status","followup date":"followup_date","follow-up date":"followup_date","fee percent":"fee_percent","fee %":"fee_percent"};
+"status":"status","column 18":"status","lead status":"status","call status":"status","current status":"status","sales status":"status","disposition":"status","lead stage":"status","followup date":"followup_date","follow-up date":"followup_date","fee percent":"fee_percent","fee %":"fee_percent"};
 function parseCSV(raw:string):string[][]{
  const out:string[][]=[];let row:string[]=[],field="",quoted=false;
  const text=raw.replace(/^\uFEFF/,"");

@@ -33,25 +33,25 @@ export default function CsvImporter({userId,onImported}:{userId:string;onImporte
  try{const data=parseCSV(await file.text());if(data.length<2)throw new Error("CSV needs a header row and at least one lead.");
  const headers=data[0].map(h=>aliases[h.trim().toLowerCase().replace(/\s+/g," ")]||"");
  if(!headers.includes("shareholder_name"))throw new Error("Missing required column: Shareholder Name(s).");
- const warnings:string[]=[],records:CsvLead[]=[];const seen=new Set<string>();
+ const warnings:string[]=[],records:CsvLead[]=[];
  for(let i=1;i<data.length;i++){const raw:Record<string,string>={};headers.forEach((h,j)=>{if(h)raw[h]=(data[i][j]||"").trim()});if(!raw.shareholder_name){if(warnings.length<8)warnings.push("Row "+(i+1)+": missing shareholder name — skipped.");continue}
  const ref=raw.ref_id||"IMPORT-"+Date.now()+"-"+i;
- if(seen.has(ref)){if(warnings.length<8)warnings.push("Row "+(i+1)+": duplicate reference in file — skipped.");continue}seen.add(ref);
- const status=(raw.status||"FOLLOW UP").toUpperCase();
- records.push({owner_id:userId,ref_id:ref,shareholder_name:raw.shareholder_name,registered_address:raw.registered_address||"",company:raw.company||"",holding_value:raw.holding_value||"",mobile_number:raw.mobile_number||"",mobile_number_type:raw.mobile_number_type||"",email:raw.email||"",input_remarks:raw.input_remarks||"",sales_remarks:raw.sales_remarks||"",status:statusOptions.has(status)?status:"FOLLOW UP",lead_date:dateValue(raw.lead_date||""),followup_date:dateValue(raw.followup_date||""),fee_percent:Number(raw.fee_percent)||12});
+ 
+ const status=(raw.status||"UNTOUCHED").toUpperCase();
+ records.push({owner_id:userId,ref_id:ref,shareholder_name:raw.shareholder_name,registered_address:raw.registered_address||"",company:raw.company||"",holding_value:raw.holding_value||"",mobile_number:raw.mobile_number||"",mobile_number_type:raw.mobile_number_type||"",email:raw.email||"",input_remarks:raw.input_remarks||"",sales_remarks:raw.sales_remarks||"",status:statusOptions.has(status)?status:"UNTOUCHED",lead_date:dateValue(raw.lead_date||""),followup_date:dateValue(raw.followup_date||""),fee_percent:Number(raw.fee_percent)||12});
  }
  if(records.length===0)throw new Error("No valid shareholder rows found.");setRows(records);setIssues(warnings);
  }catch(e){setIssues([e instanceof Error?e.message:"Unable to read CSV file."])}};
  const upload=async()=>{if(!rows.length||busy)return;setBusy(true);setMessage("");setProgress(0);let completed=0;
- for(let i=0;i<rows.length;i+=100){const batch=rows.slice(i,i+100);const {error}=await supabase.from("leads").upsert(batch,{onConflict:"owner_id,ref_id",ignoreDuplicates:true});if(error){setMessage("Import stopped at row "+(i+1)+": "+error.message+". Earlier batches may have been saved; re-uploading safely skips matching references.");setBusy(false);await onImported();return}completed+=batch.length;setProgress(completed)}
- setBusy(false);setMessage("Import finished: "+completed+" valid rows processed. Existing matching reference IDs were left unchanged.");setRows([]);await onImported()};
+ for(let i=0;i<rows.length;i+=100){const batch=rows.slice(i,i+100);const {error}=await supabase.from("leads").insert(batch);if(error){setMessage("Import stopped at row "+(i+1)+": "+error.message+". Earlier batches may have been saved. Re-uploading will create duplicates.");setBusy(false);await onImported();return}completed+=batch.length;setProgress(completed)}
+ setBusy(false);setMessage("Import finished: "+completed+" valid rows processed. Duplicate references were retained as separate leads.");setRows([]);await onImported()};
  return <section className="tableCard" style={{padding:25,marginBottom:24}}>
  <div style={{display:"flex",alignItems:"center",gap:12}}><div className="metricIcon indigo" style={{margin:0}}><FileSpreadsheet size={21}/></div><div><h2 style={{margin:"0 0 5px"}}>Import shareholder leads from CSV</h2><p className="metricHint">Upload your spreadsheet as CSV. New records are saved directly to Supabase.</p></div></div>
  <label style={{display:"block",border:"2px dashed #cdd8ed",borderRadius:12,padding:25,marginTop:22,textAlign:"center",cursor:"pointer",background:"#f9fbff"}}>
  <UploadCloud size={27} style={{display:"block",margin:"0 auto 10px",color:"#4867ce"}}/><b>{fileName||"Choose a CSV file to import"}</b><p className="metricHint">Supports your existing 12-column Claim 360 format, quoted commas and multi-line remarks · Max 10 MB</p>
  <input type="file" accept=".csv,text/csv" style={{display:"block",margin:"12px auto 0",maxWidth:"100%"}} disabled={busy} onChange={e=>readFile(e.target.files?.[0])}/></label>
  {issues.map((issue,i)=><p key={i} style={{color:"#a56b28",fontSize:12}}><AlertTriangle size={13} style={{verticalAlign:"middle"}}/> {issue}</p>)}
- {rows.length>0&&<div style={{marginTop:20}}><b>{rows.length.toLocaleString("en-IN")} valid leads ready</b><p className="metricHint">Preview: {rows.slice(0,3).map(r=>r.shareholder_name).join(" · ")}. Existing leads with the same reference ID and owner will be skipped, not overwritten.</p><button className="primary" disabled={busy} onClick={upload}><UploadCloud size={16}/>{busy?"Uploading "+progress+" / "+rows.length:"Import "+rows.length+" leads to database"}</button></div>}
+ {rows.length>0&&<div style={{marginTop:20}}><b>{rows.length.toLocaleString("en-IN")} valid leads ready</b><p className="metricHint">Preview: {rows.slice(0,3).map(r=>r.shareholder_name).join(" · ")}. Duplicate names and reference IDs will be imported as separate leads.</p><button className="primary" disabled={busy} onClick={upload}><UploadCloud size={16}/>{busy?"Uploading "+progress+" / "+rows.length:"Import "+rows.length+" leads to database"}</button></div>}
  {message&&<p style={{color:message.startsWith("Import finished")?"#258454":"#b33b4a",marginTop:15}}><CheckCircle2 size={15} style={{verticalAlign:"middle"}}/> {message}</p>}
  </section>
 }

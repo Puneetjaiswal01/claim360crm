@@ -1,5 +1,5 @@
 "use client";
-import {useMemo,useState} from "react";
+import {useEffect,useMemo,useState} from "react";
 import {Check,ClipboardCopy,ExternalLink,Mail,RotateCcw,X} from "lucide-react";
 
 type Props={
@@ -89,6 +89,7 @@ export default function EmailComposer({email,name,company,registeredAddress,hold
  const [recipient,setRecipient]=useState(emailOptions[0]||"");
  const [subject,setSubject]=useState(()=>subjectFor(cleanedName,cleanedCompany));
  const [body,setBody]=useState(()=>draftFor(cleanedName,cleanedCompany,cleanedAddress,cleanedValue));
+ useEffect(()=>{setSubject(subjectFor(cleanedName,cleanedCompany));setBody(draftFor(cleanedName,cleanedCompany,cleanedAddress,cleanedValue))},[cleanedName,cleanedCompany,cleanedAddress,cleanedValue]);
  const [copied,setCopied]=useState<"subject"|"body"|"all"|"formatted"|null>(null);
  const [notice,setNotice]=useState("");
  const [showPreview,setShowPreview]=useState(true);
@@ -121,7 +122,7 @@ export default function EmailComposer({email,name,company,registeredAddress,hold
  };
  return <section className="crmEmailComposer" aria-label="Claim 360 email template">
   <header className="crmEmailHead">
-   <div><div className="eyebrow">CLAIM 360 / OUTREACH</div><h3><Mail size={17}/> Shareholder email draft</h3><p>Automatically prepared from this lead. Review before sending.</p></div>
+   <div><div className="eyebrow">CLAIM 360 / OUTREACH</div><h3><Mail size={17}/> Shareholder email template</h3><p>Reference template · Version 2 · Name, address and value fill from this lead.</p></div>
    <button className="iconButton" type="button" onClick={onClose} aria-label="Close email draft"><X size={19}/></button>
   </header>
   <div className="crmEmailContent">
@@ -137,8 +138,8 @@ export default function EmailComposer({email,name,company,registeredAddress,hold
    </label>
    <div className="crmEmailMessageTop"><span>Message</span><button type="button" onClick={reset}><RotateCcw size={13}/> Reset template</button></div>
    <button type="button" className="secondary" aria-pressed={showPreview} onClick={()=>setShowPreview(!showPreview)}>{showPreview?"Edit wording":"Show formatted preview"}</button>
-   {showPreview&&<div aria-label="Formatted email preview" style={{border:"1px solid #777",borderRadius:8,padding:18,marginTop:12}} dangerouslySetInnerHTML={{__html:htmlBody}}/>}
-   <textarea hidden={showPreview} className="crmEmailBody" value={body} onChange={e=>setBody(e.target.value)} rows={17} spellCheck={true}/>
+   {showPreview&&<div aria-label="Formatted email preview" className="crmEmailPreview" dangerouslySetInnerHTML={{__html:htmlBody}}/>}
+   {!showPreview&&<textarea aria-label="Edit email wording" className="crmEmailBody" value={body} onChange={e=>setBody(e.target.value)} rows={17} spellCheck={true}/>}
    <div className="crmEmailNote">Wording follows your reference template. Review the lead details and regulatory note before sending. Use Copy formatted message to retain the table; Gmail and other email app links prepare plain-text drafts. Sending and delivery tracking are not yet connected to the CRM.</div>
    {notice&&<p className="crmEmailFeedback" role="status">{notice}</p>}
    <div className="crmEmailButtonRow">

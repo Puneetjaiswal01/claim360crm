@@ -238,3 +238,23 @@ tbody tr:last-child td{border-bottom:0}
  .crmEmailButtonRow .primary{margin-left:0}
  .crmEmailButtonRow button{flex:1 1 auto}
 }
+
+/* Lead window tabs and full-screen mode */
+.drawerWindowActions{display:flex;align-items:center;gap:8px}
+.drawerWindowActions .secondary{font-size:11px;padding:9px 11px}
+.drawerMaximized{width:100%;max-width:none;height:100%;box-shadow:none}
+.leadWindowTabs{display:flex;flex-shrink:0;gap:6px;padding:12px 24px 0;border-bottom:1px solid #e2e8f3;background:#fff}
+.leadWindowTabs button{display:inline-flex;align-items:center;gap:6px;border:0;border-bottom:3px solid transparent;background:transparent;padding:12px 14px;color:#687a94;font-size:12px;font-weight:700}
+.leadWindowTabs button.active{border-bottom-color:#4262cf;color:#3556c3;background:#f5f8ff;border-radius:7px 7px 0 0}
+.leadWindowTabs button:focus-visible{outline:2px solid #4262cf;outline-offset:-2px}
+.drawerBody>div[hidden]{display:none!important}
+.drawerMaximized .drawerBody{padding:25px max(30px,calc((100vw - 1120px)/2))}
+.drawerBody{min-height:0;overscroll-behavior:contain}
+.leadActivityEmpty{padding:20px;color:#71829b}
+.crmEmailPreview{border:1px solid #dbe4f0;border-radius:10px;padding:22px;background:#fff;color:#243650;overflow-wrap:anywhere}
+.crmEmailPreview table{min-width:0!important;width:100%;table-layout:fixed}
+.crmEmailPreview th,.crmEmailPreview td{white-space:normal!important;overflow:visible;text-overflow:clip;max-width:none;text-transform:none;letter-spacing:normal;font-size:13px;color:inherit;line-height:1.65}
+.crmEmailPreview tr{cursor:default}
+.crmEmailPreview tr:hover{background:transparent}
+.drawerMaximized .crmEmailComposer{max-width:1000px;margin:0 auto 24px}
+@media(max-width:540px){.drawerWindowActions .secondary span{display:none}.leadWindowTabs{padding:8px 12px 0;gap:2px}.leadWindowTabs button{padding:11px 10px;font-size:11px}.drawerMaximized .drawerBody{padding:18px 17px}.crmEmailPreview{padding:14px}.crmEmailPreview th,.crmEmailPreview td{font-size:12px}}

@@ -205,3 +205,36 @@ tbody tr:last-child td{border-bottom:0}
 @media(prefers-reduced-motion:reduce){
  *,*::before,*::after{scroll-behavior:auto!important;transition-duration:0.01ms!important;animation-duration:0.01ms!important}
 }
+
+
+/* CRM shareholder outreach composer */
+.crmEmailComposer{margin:15px 0 24px;background:#fff;border:1px solid #dce6f5;border-radius:14px;box-shadow:0 7px 26px rgba(26,47,93,.08);overflow:hidden}
+.crmEmailHead{display:flex;align-items:flex-start;justify-content:space-between;padding:19px 21px;border-bottom:1px solid #e8eef7;background:linear-gradient(115deg,#f5f8ff,#ffffff)}
+.crmEmailHead h3{display:flex;align-items:center;gap:9px;margin:7px 0;color:#223959;font-size:16px;font-weight:780}
+.crmEmailHead h3 svg{color:#4468cb}
+.crmEmailHead p{margin:0;font-size:11px;line-height:1.5;color:#8392a8}
+.crmEmailContent{padding:21px;display:flex;flex-direction:column;gap:14px}
+.crmEmailFrom{display:flex;align-items:center;flex-wrap:wrap;gap:7px 11px;background:#eff5ff;border:1px solid #dce7fa;border-radius:10px;padding:12px 13px}
+.crmEmailFrom span{font-size:11px;font-weight:740;color:#7384a0}
+.crmEmailFrom b{font-size:12px;color:#253d6b}
+.crmEmailFrom small{display:block;width:100%;margin-left:0;font-size:10px;color:#8392ac}
+.crmEmailLabel{display:flex;flex-direction:column;gap:7px;font-size:11px;font-weight:780;color:#526480}
+.crmEmailLabel input,.crmEmailLabel select,.crmEmailBody{width:100%;min-width:0;border:1px solid #dbe4f0;border-radius:10px;padding:11px 12px;background:#fff;color:#243650;font-size:12px;line-height:1.65;outline:0}
+.crmEmailLabel input:focus,.crmEmailLabel select:focus,.crmEmailBody:focus{border-color:#7190df;box-shadow:0 0 0 3px rgba(71,100,208,.10)}
+.crmEmailBody{resize:vertical;min-height:265px;white-space:pre-wrap;font-family:inherit}
+.crmEmailHelp{font-size:10.5px;color:#8b97a9;margin:-7px 0 0}
+.crmEmailMessageTop{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:-6px}
+.crmEmailMessageTop span{font-size:11px;font-weight:780;color:#526480}
+.crmEmailMessageTop button{background:none;border:none;display:inline-flex;align-items:center;gap:6px;color:#526dc3;font-size:10.5px;font-weight:730;padding:6px}
+.crmEmailMessageTop button:hover{color:#29499f}
+.crmEmailNote{padding:11px 12px;border-left:3px solid #a7bce9;background:#f7f9fe;border-radius:6px;font-size:10.5px;line-height:1.6;color:#71819b}
+.crmEmailFeedback{border:1px solid #d7e6f9;padding:10px 12px;border-radius:8px;color:#355789;background:#f4f8ff;font-size:11px;margin:0}
+.crmEmailButtonRow{display:flex;gap:8px;flex-wrap:wrap;padding-top:4px}
+.crmEmailButtonRow button{font-size:11px;padding:9px 11px}
+.crmEmailButtonRow .primary{margin-left:auto}
+@media(max-width:540px){
+ .crmEmailHead{padding:17px}
+ .crmEmailContent{padding:16px;gap:12px}
+ .crmEmailButtonRow .primary{margin-left:0}
+ .crmEmailButtonRow button{flex:1 1 auto}
+}

@@ -360,3 +360,26 @@ html[data-crm-theme="dark"] .myProfileCard .formGrid label{color:#c7d1df}
 .usageTable td{white-space:nowrap}
 html[data-crm-theme="dark"] .usageHistory header{border-color:#343c49}
 @media(max-width:600px){.usageBackdrop{padding:12px}.usageHistory{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px)}.usageHistory header{padding:16px}.usageHistory h2{font-size:19px}.usageHistoryContent{padding:0 16px 16px}}
+
+.sidebar nav{flex:1;min-height:0;overflow-y:auto}.sideBottom{flex-shrink:0}
+.opsCard{padding:24px;margin-bottom:24px}.opsHead{display:flex;justify-content:space-between;gap:16px;margin-bottom:24px}.opsHead h2{margin:0 0 8px}.opsHead p{color:var(--crm-muted);font-size:13px;line-height:1.7;margin:0;max-width:750px}
+.opsCard fieldset{border:1px solid var(--crm-border);border-radius:12px;padding:20px;min-width:0}.opsCard legend{padding:0 8px;font-weight:700}
+.opsActions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:16px}.opsList{display:grid;gap:12px;margin-top:24px}
+.opsItem{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:18px;border:1px solid var(--crm-border);border-radius:12px}
+.opsItem b,.opsItem span{display:block}.opsItem span{font-size:12px;color:var(--crm-muted);line-height:1.8}.opsItem p{font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}
+.opsDetail{margin:24px 0;padding:20px;border:1px solid var(--crm-border);border-radius:12px}.opsDetail td{white-space:pre-wrap;min-width:150px;max-width:500px;overflow-wrap:anywhere}
+.opsSuccess{color:#16835b;background:#eaf8f1;border:1px solid #c6ead9;padding:12px;border-radius:9px}
+.opsFilter{display:flex;gap:12px;align-items:center;margin-bottom:16px}.opsFilter select{padding:10px;border:1px solid var(--crm-border);border-radius:8px}
+.opsConfirm{display:flex;gap:10px;align-items:center;margin-top:20px;font-size:13px}.opsConfirm input{width:auto}
+.opsCard a{color:#3d5ccf}.opsCard pre{white-space:pre-wrap;overflow-wrap:anywhere}
+.reminderButton{position:relative;padding:10px}.reminderButton b{font-size:10px;background:#3b5cdd;color:white;border-radius:20px;padding:2px 5px}
+.reminderBackdrop{position:fixed;inset:0;z-index:1001;background:#0e1b3133}
+.reminderPanel{position:absolute;right:20px;top:88px;width:min(460px,calc(100vw - 40px));max-height:calc(100dvh - 108px);display:flex;flex-direction:column;background:white;border:1px solid var(--crm-border);border-radius:14px;box-shadow:0 18px 70px #10204033;color:#243650;overflow:hidden}
+.reminderPanel header{display:flex;justify-content:space-between;padding:18px;gap:10px;border-bottom:1px solid var(--crm-border);flex-shrink:0}.reminderPanel h2{margin:0;font-size:20px}.reminderPanel header p{font-size:12px;color:var(--crm-muted);line-height:1.6}
+.reminderContent{overflow:auto;min-height:0;padding:18px}.reminderContent .opsItem{margin-bottom:12px}
+html[data-crm-theme="dark"] :is(.opsCard,.reminderPanel){background:#1b2028;color:#e8ecf3;border-color:#343c49}
+html[data-crm-theme="dark"] :is(.opsCard fieldset,.opsItem,.opsDetail,.reminderPanel header){border-color:#343c49}
+html[data-crm-theme="dark"] :is(.opsItem span,.opsHead p,.opsFilter,.opsConfirm){color:#b3bfce}
+html[data-crm-theme="dark"] .opsSuccess{color:#8ce6b6;background:#1c4035;border-color:#356b55}
+html[data-crm-theme="dark"] .opsCard a{color:#9bb3ff}
+@media(max-width:700px){.opsCard{padding:18px}.opsHead,.opsItem{flex-direction:column}.opsCard .formGrid{grid-template-columns:1fr}.opsCard fieldset{padding:14px}.opsFilter{align-items:flex-start;flex-direction:column}.reminderPanel{top:100px;right:12px;width:calc(100vw - 24px);max-height:calc(100dvh - 112px)}}

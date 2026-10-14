@@ -349,3 +349,14 @@ html[data-crm-theme="dark"] .crmEmailFeedback{background:#253d56;color:#bddcff;b
 html[data-crm-theme="dark"] .myProfileAvatar{background:#27365b;color:#9ab5ff}
 html[data-crm-theme="dark"] .myProfileCard .formGrid label{color:#c7d1df}
 @media(max-width:650px){.myProfileCard{padding:20px}.myProfileCard .formGrid{grid-template-columns:1fr}.myProfileFooter{align-items:stretch;flex-direction:column}}
+
+/* The login-hours dialog is portaled to body so the sticky toolbar cannot contain it. */
+.usageBackdrop{z-index:1000;overflow:hidden;overscroll-behavior:contain}
+.usageHistory{display:flex;flex-direction:column;max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px);min-height:0;overflow:hidden;padding:0}
+.usageHistory header{flex-shrink:0;gap:16px;padding:22px 24px 16px;border-bottom:1px solid #e5ebf4}
+.usageHistory header p{margin:8px 0 0}
+.usageHistory header .iconButton{flex-shrink:0}
+.usageHistoryContent{min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:0 24px 24px;scrollbar-gutter:stable}
+.usageTable td{white-space:nowrap}
+html[data-crm-theme="dark"] .usageHistory header{border-color:#343c49}
+@media(max-width:600px){.usageBackdrop{padding:12px}.usageHistory{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px)}.usageHistory header{padding:16px}.usageHistory h2{font-size:19px}.usageHistoryContent{padding:0 16px 16px}}

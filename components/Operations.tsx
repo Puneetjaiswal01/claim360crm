@@ -61,9 +61,9 @@ export default function Operations({view,userId,ownerId,admin,members,onOpen,onC
   if(r.error)throw new Error(r.error.message);setActivityNotes("");await load();setMessage("Activity logged.");
  });}
  const duplicateGroups=useMemo(()=>{const groups=new Map<string,Row[]>();for(const l of leads){
-  const company=norm(l.company);const keys=["name:"+norm(l.shareholder_name)+"|"+company];
-  if(company&&phone(l.mobile_number))keys.push("phone:"+phone(l.mobile_number)+"|"+company);
-  if(company&&norm(l.email))keys.push("email:"+norm(l.email)+"|"+company);
+  const company=norm(l.company);const keys:string[]=[];if(company&&norm(l.shareholder_name))keys.push("name:"+norm(l.shareholder_name)+"|"+company);
+  if(company&&phone(l.mobile_number).length>=7)keys.push("phone:"+phone(l.mobile_number)+"|"+company);
+  if(company&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(l.email||"").trim()))keys.push("email:"+norm(l.email)+"|"+company);
   for(const key of keys){groups.set(key,[...(groups.get(key)||[]),l]);}
  }const seen=new Set<string>();return [...groups.entries()].filter(([,g])=>g.length>1).filter(([,g])=>{const k=g.map(l=>l.id).sort().join("|");if(seen.has(k))return false;seen.add(k);return true;});},[leads]);
  const visibleVisits=visits.filter(v=>!search||[v.contact_name,v.company,v.location].some(x=>String(x||"").toLowerCase().includes(search.toLowerCase()))).sort((a,b)=>Date.parse(a.scheduled_at)-Date.parse(b.scheduled_at));

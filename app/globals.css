@@ -260,9 +260,9 @@ tbody tr:last-child td{border-bottom:0}
 @media(max-width:540px){.drawerWindowActions .secondary span{display:none}.leadWindowTabs{padding:8px 12px 0;gap:2px}.leadWindowTabs button{padding:11px 10px;font-size:11px}.drawerMaximized .drawerBody{padding:18px 17px}.crmEmailPreview{padding:14px}.crmEmailPreview th,.crmEmailPreview td{font-size:12px}}
 
 /* Personal appearance and cloud-synced CRM usage */
-html[data-crm-theme="mono"]{filter:grayscale(1)}
-html[data-crm-theme="mono-dark"]{filter:grayscale(1) invert(1)}
-html[data-crm-theme="mono-dark"] img{filter:invert(1)}
+
+
+
 .workspaceControls{display:flex;align-items:center;gap:12px}
 .themeControl{display:flex;align-items:center;gap:6px;color:#526480}
 .themeControl select{border:1px solid #dbe3ef;border-radius:8px;padding:8px;background:#fff;color:#263650;font-size:11px;max-width:155px}
@@ -280,3 +280,51 @@ html[data-crm-theme="mono-dark"] img{filter:invert(1)}
 .usageTable tr{cursor:default}
 @media(max-width:1000px){.topActions{gap:10px}.topRole,.topActions>.connected{display:none}}
 @media(max-width:650px){.topbar{height:auto;min-height:76px;flex-wrap:wrap;padding:12px 16px;gap:10px}.workspaceControls{gap:7px}.themeControl select{max-width:120px;font-size:10px}.themeControl>svg{display:none}.usageControl{padding:7px}.usageControl b{font-size:10px}.topActions .smallAvatar{display:none}}
+
+/* True light and dark appearance: no image inversion or page filters. */
+html[data-crm-theme="light"]{color-scheme:light}
+html[data-crm-theme="light"] body{background:#f4f4f4;color:#202020}
+html[data-crm-theme="light"] .sidebar{background:#fff;color:#222;border-right:1px solid #ddd}
+html[data-crm-theme="light"] .sidebar nav button,html[data-crm-theme="light"] .signout{color:#555}
+html[data-crm-theme="light"] .sidebar nav button.active,html[data-crm-theme="light"] .sidebar nav button:hover{background:#eee;color:#111;box-shadow:inset 3px 0 #222}
+html[data-crm-theme="light"] .sideCaption,html[data-crm-theme="light"] .profile small{color:#666}
+html[data-crm-theme="light"] .secure,html[data-crm-theme="light"] .workspaceSwitcher{background:#f5f5f5;color:#555;border-color:#ddd}
+html[data-crm-theme="light"] .workspaceSwitchButton,html[data-crm-theme="light"] .workspaceSwitchButton.selected{background:#eee;color:#222;border-color:#ddd}
+html[data-crm-theme="light"] .primary{background:#222;color:#fff;box-shadow:none}
+html[data-crm-theme="light"] .primary:hover{background:#444}
+html[data-crm-theme="light"] .pageHeading{background:#fff;border-color:#ddd}
+html[data-crm-theme="light"] .leadWindowTabs button.active{color:#111;border-bottom-color:#222;background:#eee}
+html[data-crm-theme="light"] .avatar,html[data-crm-theme="light"] .metricIcon{background:#eee;color:#333}
+html[data-crm-theme="light"] .eyebrow{color:#555}
+html[data-crm-theme="dark"]{color-scheme:dark}
+html[data-crm-theme="dark"] body{background:#101216;color:#e8ecf3}
+html[data-crm-theme="dark"] .sidebar{background:#14171c;color:#eef1f7;border-right:1px solid #303744}
+html[data-crm-theme="dark"] :is(.topbar,.pageHeading,.metric,.tableCard,.statusOverview,.drawer,.drawerHead,.drawerFooter,.crmEmailComposer,.crmEmailHead,.crmEmailPreview,.usageHistory,.authCard){background:#1b2028!important;border-color:#343c49!important;color:#e8ecf3}
+html[data-crm-theme="dark"] :is(.drawerBody,.crmEmailContent){background:#1b2028;color:#e8ecf3}
+html[data-crm-theme="dark"] :is(h1,h2,h3,h4,.metricNumber,.person b,.holding,.breadcrumb b,.profile b,.crmEmailHead h3,.usageHistory h2){color:#f3f5f9!important}
+html[data-crm-theme="dark"] :is(p,small,.metricLabel,.metricHint,.pageHeading p,.tableHeading p,.crmEmailHead p,.crmEmailLabel,.formGrid label,.crmEmailMessageTop span,.usageExplanation,.profile small){color:#b3bfce}
+html[data-crm-theme="dark"] :is(.sidebar nav button,.signout){color:#bbc5d4}
+html[data-crm-theme="dark"] :is(.sidebar nav button.active,.sidebar nav button:hover){background:#303743;color:#fff;box-shadow:inset 3px 0 #d8e0ec}
+html[data-crm-theme="dark"] :is(.workspaceSwitcher,.workspaceSwitchButton,.secure,.profile,.crmEmailFrom){background:#252c36;color:#dbe3f1;border-color:#414a58}
+html[data-crm-theme="dark"] .workspaceSwitchButton.selected{background:#384251;color:#fff}
+html[data-crm-theme="dark"] :is(.searchBox,.selectBox,input,select,textarea,.crmEmailBody,.themeControl select,.toolbar select){background:#12171e!important;border-color:#414c5d!important;color:#e5ebf5!important}
+html[data-crm-theme="dark"] :is(.secondary,.quiet,.queueTab,.usageControl,.tableFooter button){background:#29313d;color:#e6edf8;border-color:#465162}
+html[data-crm-theme="dark"] .primary{background:#e4e9f1;color:#161b23;box-shadow:none}
+html[data-crm-theme="dark"] .primary:hover{background:#fff}
+html[data-crm-theme="dark"] :is(.topRole,.connected,.headingPill,.headingContext){background:#272f3b;color:#ccd7e7;border-color:#465162}
+html[data-crm-theme="dark"] :is(.statusTile,.statusTotal,.statusRnr,.queueEmpty,.queueItem){background:#202732!important;border-color:#3a4656!important}
+html[data-crm-theme="dark"] :is(.statusTile strong,.statusTile span,.statusTile small,.queueEmpty b,.queueEmpty span){color:#d9e2f0}
+html[data-crm-theme="dark"] .queueItem:hover{background:#2b3441!important}
+html[data-crm-theme="dark"] :is(thead,th){background:#232b36;color:#c4cfdf;border-color:#394453}
+html[data-crm-theme="dark"] td{color:#c7d1df;border-color:#394453}
+html[data-crm-theme="dark"] tbody tr:hover{background:#262f3b}
+html[data-crm-theme="dark"] .crmEmailPreview tr:hover{background:transparent}
+html[data-crm-theme="dark"] .crmEmailPreview :is(th,td){background:transparent;color:#e5ebf5;border-color:#748195!important}
+html[data-crm-theme="dark"] :is(.crmEmailNote,.crmEmailFeedback){background:#252e3b;color:#c4d1e4;border-color:#536881}
+html[data-crm-theme="dark"] :is(.avatar,.metricIcon,.personAvatar){background:#354052;color:#e0e8f5}
+html[data-crm-theme="dark"] :is(.crmEmailFrom b,.crmEmailFrom span,.crmEmailFrom small,.usageControl small,.eyebrow,.sideCaption){color:#bac8dd}
+html[data-crm-theme="dark"] .leadWindowTabs{background:#1b2028;border-color:#343c49}
+html[data-crm-theme="dark"] .leadWindowTabs button{color:#bcc8da}
+html[data-crm-theme="dark"] .leadWindowTabs button.active{background:#303a49;color:#fff;border-bottom-color:#e5ebf5}
+@media(max-width:1250px){.topActions{gap:10px}.topRole,.topActions>.connected{display:none}.topbar{gap:12px}.breadcrumb{flex-shrink:1}}
+@media(max-width:700px){.topbar{height:auto;min-height:76px;flex-wrap:wrap;padding:12px 16px}.topActions{max-width:100%;min-width:0}.workspaceControls{flex-wrap:wrap}}

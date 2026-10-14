@@ -6,7 +6,7 @@ import {ArrowLeft,Download,RefreshCw,Search,ChevronLeft,ChevronRight} from "luci
 type Member={user_id:string;email:string;role:string;display_name?:string;designation?:string};
 type Brief={status:string;followup_date:string|null;followup_completed_at:string|null;created_at:string};
 type Lead={id:string;ref_id:string|null;shareholder_name:string;company:string|null;holding_value:string|null;mobile_number:string|null;email:string|null;status:string;followup_date:string|null;lead_date:string|null};
-const STAGES=["NEW","UNTOUCHED","RINGING NOT RESPONDING","NOT REACHABLE","FOLLOW UP","POTENTIAL","CLOSED","CONVERTED","INTERNATIONAL","LOSS","REMINING"];
+const STAGES=["NEW","UNTOUCHED","RINGING NOT RESPONDING","NOT REACHABLE","FOLLOW UP","VISIT","POTENTIAL","CLOSED","CONVERTED","INTERNATIONAL","LOSS","REMINING"];
 const localDay=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
 const PAGE=50;
 export default function EmployeeDashboard({member,onBack,onOpen,refreshKey}:{member:Member;onBack:()=>void;onOpen:(lead:any)=>void;refreshKey:number}){

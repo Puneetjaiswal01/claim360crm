@@ -282,20 +282,6 @@ tbody tr:last-child td{border-bottom:0}
 @media(max-width:650px){.topbar{height:auto;min-height:76px;flex-wrap:wrap;padding:12px 16px;gap:10px}.workspaceControls{gap:7px}.themeControl select{max-width:120px;font-size:10px}.themeControl>svg{display:none}.usageControl{padding:7px}.usageControl b{font-size:10px}.topActions .smallAvatar{display:none}}
 
 /* True light and dark appearance: no image inversion or page filters. */
-html[data-crm-theme="light"]{color-scheme:light}
-html[data-crm-theme="light"] body{background:#f4f4f4;color:#202020}
-html[data-crm-theme="light"] .sidebar{background:#fff;color:#222;border-right:1px solid #ddd}
-html[data-crm-theme="light"] .sidebar nav button,html[data-crm-theme="light"] .signout{color:#555}
-html[data-crm-theme="light"] .sidebar nav button.active,html[data-crm-theme="light"] .sidebar nav button:hover{background:#eee;color:#111;box-shadow:inset 3px 0 #222}
-html[data-crm-theme="light"] .sideCaption,html[data-crm-theme="light"] .profile small{color:#666}
-html[data-crm-theme="light"] .secure,html[data-crm-theme="light"] .workspaceSwitcher{background:#f5f5f5;color:#555;border-color:#ddd}
-html[data-crm-theme="light"] .workspaceSwitchButton,html[data-crm-theme="light"] .workspaceSwitchButton.selected{background:#eee;color:#222;border-color:#ddd}
-html[data-crm-theme="light"] .primary{background:#222;color:#fff;box-shadow:none}
-html[data-crm-theme="light"] .primary:hover{background:#444}
-html[data-crm-theme="light"] .pageHeading{background:#fff;border-color:#ddd}
-html[data-crm-theme="light"] .leadWindowTabs button.active{color:#111;border-bottom-color:#222;background:#eee}
-html[data-crm-theme="light"] .avatar,html[data-crm-theme="light"] .metricIcon{background:#eee;color:#333}
-html[data-crm-theme="light"] .eyebrow{color:#555}
 html[data-crm-theme="dark"]{color-scheme:dark}
 html[data-crm-theme="dark"] body{background:#101216;color:#e8ecf3}
 html[data-crm-theme="dark"] .sidebar{background:#14171c;color:#eef1f7;border-right:1px solid #303744}
@@ -328,3 +314,23 @@ html[data-crm-theme="dark"] .leadWindowTabs button{color:#bcc8da}
 html[data-crm-theme="dark"] .leadWindowTabs button.active{background:#303a49;color:#fff;border-bottom-color:#e5ebf5}
 @media(max-width:1250px){.topActions{gap:10px}.topRole,.topActions>.connected{display:none}.topbar{gap:12px}.breadcrumb{flex-shrink:1}}
 @media(max-width:700px){.topbar{height:auto;min-height:76px;flex-wrap:wrap;padding:12px 16px}.topActions{max-width:100%;min-width:0}.workspaceControls{flex-wrap:wrap}}
+
+/* Preserve the original brand and status accents in Dark. */
+html[data-crm-theme="dark"] .primary{background:#3b5cdd;color:#fff;box-shadow:0 4px 10px #3b5cdd1a}
+html[data-crm-theme="dark"] .primary:hover{background:#4f70ee}
+html[data-crm-theme="dark"] .sidebar nav button.active{background:#26385a;color:#fff;box-shadow:inset 3px 0 #6386ff}
+html[data-crm-theme="dark"] .sidebar nav button:hover{background:#26385a;color:#fff}
+html[data-crm-theme="dark"] .workspaceSwitchButton.selected{background:#27375a;color:#c9d7ff;border-color:#5570bb}
+html[data-crm-theme="dark"] .avatar,html[data-crm-theme="dark"] .personAvatar{background:#2b3757;color:#a9bcff}
+html[data-crm-theme="dark"] .metricIcon.indigo{background:#27365b;color:#9ab5ff}
+html[data-crm-theme="dark"] .metricIcon.emerald{background:#1c4035;color:#65dca6}
+html[data-crm-theme="dark"] .metricIcon.amber{background:#483a23;color:#f4c26a}
+html[data-crm-theme="dark"] .metricIcon.violet{background:#382c52;color:#c8a4fa}
+html[data-crm-theme="dark"] .eyebrow{color:#9bb3ff}
+html[data-crm-theme="dark"] .reference,html[data-crm-theme="dark"] .rowEdit{color:#98b6ff}
+html[data-crm-theme="dark"] .queueTab.active{background:#2b3a66;color:#c1d0ff;border-color:#516aab}
+html[data-crm-theme="dark"] .leadWindowTabs button.active{background:#293859;color:#c1d0ff;border-bottom-color:#7d9bff}
+html[data-crm-theme="dark"] .crmEmailHead h3 svg{color:#91acff}
+html[data-crm-theme="dark"] .headingPill{background:#28395b;color:#bbcdff;border-color:#4b65a2}
+html[data-crm-theme="dark"] .crmEmailFrom{background:#243654;border-color:#49638f}
+html[data-crm-theme="dark"] .crmEmailFeedback{background:#253d56;color:#bddcff;border-color:#4d739b}

@@ -481,3 +481,17 @@ html[data-crm-theme="dark"] .footerText{color:#8399ba;line-height:1.7}
 html[data-crm-theme="dark"] :is(.sidebar,.tableScroll,.drawerBody,.queueList,.usageHistoryContent){scrollbar-width:thin;scrollbar-color:#3b5275 transparent}
 html[data-crm-theme="dark"] .employeeHeader{background:radial-gradient(ellipse at 100% 0%,#294c7b70,transparent 70%),#142238!important}
 @media(max-height:850px) and (min-width:851px){.sidebar .logo{padding-bottom:19px;margin-bottom:18px}.sidebar .secure{margin-bottom:10px}.sidebar .sideBottom{padding-top:10px}.sidebar .workspaceSwitcher{padding:8px;margin-bottom:9px}.sidebar nav button{min-height:40px;padding-top:10px;padding-bottom:10px}}
+
+/* Keep lead ownership visible to administrators across all editor tabs. */
+.leadAssignment{display:flex;flex-shrink:0;align-items:center;gap:12px;padding:15px 30px;background:#f0f5ff;border-bottom:1px solid #dce6f7}
+.leadAssignmentIcon{width:38px;height:38px;display:grid;place-items:center;flex-shrink:0;border-radius:11px;background:#e0e9ff;color:#3e5ccf}
+.leadAssignment>div{min-width:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.leadAssignment small{display:block;width:100%;font-size:10px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:#61789b}
+.leadAssignment strong{font-size:14px;color:#203c67;overflow-wrap:anywhere}
+.leadAssignment>div>span{font-size:11px;color:#7085a4}
+.leadOwnerInline{display:flex;align-items:center;gap:5px;margin-top:6px;font-size:10px;color:#526da0}
+html[data-crm-theme="dark"] .leadAssignment{background:#182c49;border-color:#334d72}
+html[data-crm-theme="dark"] .leadAssignmentIcon{background:#2a426d;color:#b6cdff}
+html[data-crm-theme="dark"] .leadAssignment strong{color:#e3edff}
+html[data-crm-theme="dark"] :is(.leadAssignment small,.leadAssignment>div>span,.leadOwnerInline){color:#a8c0e6}
+@media(max-width:540px){.leadAssignment{padding:12px 17px}.leadAssignment strong{font-size:13px}}

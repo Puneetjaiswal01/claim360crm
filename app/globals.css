@@ -281,59 +281,11 @@ tbody tr:last-child td{border-bottom:0}
 @media(max-width:1000px){.topActions{gap:10px}.topRole,.topActions>.connected{display:none}}
 @media(max-width:650px){.topbar{height:auto;min-height:76px;flex-wrap:wrap;padding:12px 16px;gap:10px}.workspaceControls{gap:7px}.themeControl select{max-width:120px;font-size:10px}.themeControl>svg{display:none}.usageControl{padding:7px}.usageControl b{font-size:10px}.topActions .smallAvatar{display:none}}
 
-/* True light and dark appearance: no image inversion or page filters. */
-html[data-crm-theme="dark"]{color-scheme:dark}
-html[data-crm-theme="dark"] body{background:#101216;color:#e8ecf3}
-html[data-crm-theme="dark"] .sidebar{background:#14171c;color:#eef1f7;border-right:1px solid #303744}
-html[data-crm-theme="dark"] :is(.topbar,.pageHeading,.metric,.tableCard,.statusOverview,.drawer,.drawerHead,.drawerFooter,.crmEmailComposer,.crmEmailHead,.crmEmailPreview,.usageHistory,.authCard){background:#1b2028!important;border-color:#343c49!important;color:#e8ecf3}
-html[data-crm-theme="dark"] :is(.drawerBody,.crmEmailContent){background:#1b2028;color:#e8ecf3}
-html[data-crm-theme="dark"] :is(h1,h2,h3,h4,.metricNumber,.person b,.holding,.breadcrumb b,.profile b,.crmEmailHead h3,.usageHistory h2){color:#f3f5f9!important}
-html[data-crm-theme="dark"] :is(p,small,.metricLabel,.metricHint,.pageHeading p,.tableHeading p,.crmEmailHead p,.crmEmailLabel,.formGrid label,.crmEmailMessageTop span,.usageExplanation,.profile small){color:#b3bfce}
-html[data-crm-theme="dark"] :is(.sidebar nav button,.signout){color:#bbc5d4}
-html[data-crm-theme="dark"] :is(.sidebar nav button.active,.sidebar nav button:hover){background:#303743;color:#fff;box-shadow:inset 3px 0 #d8e0ec}
-html[data-crm-theme="dark"] :is(.workspaceSwitcher,.workspaceSwitchButton,.secure,.profile,.crmEmailFrom){background:#252c36;color:#dbe3f1;border-color:#414a58}
-html[data-crm-theme="dark"] .workspaceSwitchButton.selected{background:#384251;color:#fff}
-html[data-crm-theme="dark"] :is(.searchBox,.selectBox,input,select,textarea,.crmEmailBody,.themeControl select,.toolbar select){background:#12171e!important;border-color:#414c5d!important;color:#e5ebf5!important}
-html[data-crm-theme="dark"] :is(.secondary,.quiet,.queueTab,.usageControl,.tableFooter button){background:#29313d;color:#e6edf8;border-color:#465162}
-html[data-crm-theme="dark"] .primary{background:#e4e9f1;color:#161b23;box-shadow:none}
-html[data-crm-theme="dark"] .primary:hover{background:#fff}
-html[data-crm-theme="dark"] :is(.topRole,.connected,.headingPill,.headingContext){background:#272f3b;color:#ccd7e7;border-color:#465162}
-html[data-crm-theme="dark"] :is(.statusTile,.statusTotal,.statusRnr,.queueEmpty,.queueItem){background:#202732!important;border-color:#3a4656!important}
-html[data-crm-theme="dark"] :is(.statusTile strong,.statusTile span,.statusTile small,.queueEmpty b,.queueEmpty span){color:#d9e2f0}
-html[data-crm-theme="dark"] .queueItem:hover{background:#2b3441!important}
-html[data-crm-theme="dark"] :is(thead,th){background:#232b36;color:#c4cfdf;border-color:#394453}
-html[data-crm-theme="dark"] td{color:#c7d1df;border-color:#394453}
-html[data-crm-theme="dark"] tbody tr:hover{background:#262f3b}
-html[data-crm-theme="dark"] .crmEmailPreview tr:hover{background:transparent}
-html[data-crm-theme="dark"] .crmEmailPreview :is(th,td){background:transparent;color:#e5ebf5;border-color:#748195!important}
-html[data-crm-theme="dark"] :is(.crmEmailNote,.crmEmailFeedback){background:#252e3b;color:#c4d1e4;border-color:#536881}
-html[data-crm-theme="dark"] :is(.avatar,.metricIcon,.personAvatar){background:#354052;color:#e0e8f5}
-html[data-crm-theme="dark"] :is(.crmEmailFrom b,.crmEmailFrom span,.crmEmailFrom small,.usageControl small,.eyebrow,.sideCaption){color:#bac8dd}
-html[data-crm-theme="dark"] .leadWindowTabs{background:#1b2028;border-color:#343c49}
-html[data-crm-theme="dark"] .leadWindowTabs button{color:#bcc8da}
-html[data-crm-theme="dark"] .leadWindowTabs button.active{background:#303a49;color:#fff;border-bottom-color:#e5ebf5}
+
 @media(max-width:1250px){.topActions{gap:10px}.topRole,.topActions>.connected{display:none}.topbar{gap:12px}.breadcrumb{flex-shrink:1}}
 @media(max-width:700px){.topbar{height:auto;min-height:76px;flex-wrap:wrap;padding:12px 16px}.topActions{max-width:100%;min-width:0}.workspaceControls{flex-wrap:wrap}}
 
-/* Preserve the original brand and status accents in Dark. */
-html[data-crm-theme="dark"] .primary{background:#3b5cdd;color:#fff;box-shadow:0 4px 10px #3b5cdd1a}
-html[data-crm-theme="dark"] .primary:hover{background:#4f70ee}
-html[data-crm-theme="dark"] .sidebar nav button.active{background:#26385a;color:#fff;box-shadow:inset 3px 0 #6386ff}
-html[data-crm-theme="dark"] .sidebar nav button:hover{background:#26385a;color:#fff}
-html[data-crm-theme="dark"] .workspaceSwitchButton.selected{background:#27375a;color:#c9d7ff;border-color:#5570bb}
-html[data-crm-theme="dark"] .avatar,html[data-crm-theme="dark"] .personAvatar{background:#2b3757;color:#a9bcff}
-html[data-crm-theme="dark"] .metricIcon.indigo{background:#27365b;color:#9ab5ff}
-html[data-crm-theme="dark"] .metricIcon.emerald{background:#1c4035;color:#65dca6}
-html[data-crm-theme="dark"] .metricIcon.amber{background:#483a23;color:#f4c26a}
-html[data-crm-theme="dark"] .metricIcon.violet{background:#382c52;color:#c8a4fa}
-html[data-crm-theme="dark"] .eyebrow{color:#9bb3ff}
-html[data-crm-theme="dark"] .reference,html[data-crm-theme="dark"] .rowEdit{color:#98b6ff}
-html[data-crm-theme="dark"] .queueTab.active{background:#2b3a66;color:#c1d0ff;border-color:#516aab}
-html[data-crm-theme="dark"] .leadWindowTabs button.active{background:#293859;color:#c1d0ff;border-bottom-color:#7d9bff}
-html[data-crm-theme="dark"] .crmEmailHead h3 svg{color:#91acff}
-html[data-crm-theme="dark"] .headingPill{background:#28395b;color:#bbcdff;border-color:#4b65a2}
-html[data-crm-theme="dark"] .crmEmailFrom{background:#243654;border-color:#49638f}
-html[data-crm-theme="dark"] .crmEmailFeedback{background:#253d56;color:#bddcff;border-color:#4d739b}
+
 
 .myProfileCard{max-width:900px;padding:28px}
 .myProfileHeader{display:flex;align-items:center;gap:16px;margin-bottom:28px}
@@ -346,8 +298,6 @@ html[data-crm-theme="dark"] .crmEmailFeedback{background:#253d56;color:#bddcff;b
 .myProfileFooter{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:24px}
 .myProfileFooter p{font-size:13px;color:var(--crm-muted)}
 .srOnly{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-html[data-crm-theme="dark"] .myProfileAvatar{background:#27365b;color:#9ab5ff}
-html[data-crm-theme="dark"] .myProfileCard .formGrid label{color:#c7d1df}
 @media(max-width:650px){.myProfileCard{padding:20px}.myProfileCard .formGrid{grid-template-columns:1fr}.myProfileFooter{align-items:stretch;flex-direction:column}}
 
 /* The login-hours dialog is portaled to body so the sticky toolbar cannot contain it. */
@@ -358,7 +308,6 @@ html[data-crm-theme="dark"] .myProfileCard .formGrid label{color:#c7d1df}
 .usageHistory header .iconButton{flex-shrink:0}
 .usageHistoryContent{min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:0 24px 24px;scrollbar-gutter:stable}
 .usageTable td{white-space:nowrap}
-html[data-crm-theme="dark"] .usageHistory header{border-color:#343c49}
 @media(max-width:600px){.usageBackdrop{padding:12px}.usageHistory{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px)}.usageHistory header{padding:16px}.usageHistory h2{font-size:19px}.usageHistoryContent{padding:0 16px 16px}}
 
 .sidebar nav{flex:1;min-height:0;overflow-y:auto}.sideBottom{flex-shrink:0}
@@ -377,11 +326,6 @@ html[data-crm-theme="dark"] .usageHistory header{border-color:#343c49}
 .reminderPanel{position:absolute;right:20px;top:88px;width:min(460px,calc(100vw - 40px));max-height:calc(100dvh - 108px);display:flex;flex-direction:column;background:white;border:1px solid var(--crm-border);border-radius:14px;box-shadow:0 18px 70px #10204033;color:#243650;overflow:hidden}
 .reminderPanel header{display:flex;justify-content:space-between;padding:18px;gap:10px;border-bottom:1px solid var(--crm-border);flex-shrink:0}.reminderPanel h2{margin:0;font-size:20px}.reminderPanel header p{font-size:12px;color:var(--crm-muted);line-height:1.6}
 .reminderContent{overflow:auto;min-height:0;padding:18px}.reminderContent .opsItem{margin-bottom:12px}
-html[data-crm-theme="dark"] :is(.opsCard,.reminderPanel){background:#1b2028;color:#e8ecf3;border-color:#343c49}
-html[data-crm-theme="dark"] :is(.opsCard fieldset,.opsItem,.opsDetail,.reminderPanel header){border-color:#343c49}
-html[data-crm-theme="dark"] :is(.opsItem span,.opsHead p,.opsFilter,.opsConfirm){color:#b3bfce}
-html[data-crm-theme="dark"] .opsSuccess{color:#8ce6b6;background:#1c4035;border-color:#356b55}
-html[data-crm-theme="dark"] .opsCard a{color:#9bb3ff}
 @media(max-width:700px){.opsCard{padding:18px}.opsHead,.opsItem{flex-direction:column}.opsCard .formGrid{grid-template-columns:1fr}.opsCard fieldset{padding:14px}.opsFilter{align-items:flex-start;flex-direction:column}.reminderPanel{top:100px;right:12px;width:calc(100vw - 24px);max-height:calc(100dvh - 112px)}}
 
 /* Keep decorative metric circles inside cards on narrow screens. */
@@ -392,8 +336,148 @@ html[data-crm-theme="dark"] .opsCard a{color:#9bb3ff}
 .bulkSelectionCount{display:inline-flex;align-items:center;min-height:36px;padding:6px 10px;border-radius:8px;background:#e5ecff;color:#304caa;font-size:13px;white-space:nowrap}
 .bulkActions select{min-height:44px;min-width:210px;padding:10px 12px;border:1px solid #d8e1f1;border-radius:9px;background:white;color:#243650;font:inherit}
 .bulkActions .primary:disabled{background:#e0e6f2;color:#53637f;border:1px solid #cbd5e6;opacity:1;box-shadow:none;cursor:not-allowed}
-html[data-crm-theme="dark"] .bulkActions{background:#222b38;border-color:#414c5d;color:#e5ebf5}
-html[data-crm-theme="dark"] .bulkSelectionCount{background:#293a60;color:#c5d4ff}
-html[data-crm-theme="dark"] .bulkActions .primary:disabled{background:#303d52;color:#b5c3d9;border-color:#465772;opacity:1}
-html[data-crm-theme="dark"] .bulkActions small{color:#c7d3e5}
 @media(max-width:650px){.bulkActions select{width:100%;min-width:0}.bulkActions button{flex:1 1 auto}.bulkActions>.primary{flex-basis:100%}}
+
+
+/* Shared layout refinements */
+.employeeHeader{padding:24px;margin-bottom:24px}
+.employeeIdentity{display:flex;align-items:center;gap:16px;margin-top:22px}
+.employeeAvatar{display:grid;place-items:center;width:58px;height:58px;flex-shrink:0;border-radius:17px;background:#edf1ff;color:#3d5ccf;font-size:20px;font-weight:800}
+.employeeIdentity h2{font-size:27px;letter-spacing:-.7px;margin:7px 0}
+.employeeIdentity p{margin:0;line-height:1.7}
+.employeeDashboard .statusTile[aria-pressed="true"]{border-color:#6386e9;box-shadow:0 0 0 2px #6386e926}
+.statusTile{position:relative}
+.stage{display:inline-flex;align-items:center;gap:6px;line-height:1.25}
+.stage::before{content:"";height:5px;width:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.historyEntry details{margin:12px 0;font-size:12px}
+.historyEntry summary{cursor:pointer}
+@media(max-width:600px){.employeeHeader{padding:18px}.employeeIdentity{gap:12px}.employeeAvatar{width:46px;height:46px;border-radius:13px;font-size:16px}.employeeIdentity h2{font-size:23px}}
+
+/* Claim360 Dark: blue brand accents, layered surfaces and readable states. */
+html[data-crm-theme="dark"]{
+ color-scheme:dark;
+ --crm-bg:#0b1220;--crm-surface:#121e30;--crm-ink:#e8eef8;
+ --crm-muted:#a2b1c9;--crm-border:#2a3a52;--crm-blue:#9bb5ff;
+ --crm-sidebar:#0e1727;--crm-shadow:0 8px 28px #02081225;
+}
+html[data-crm-theme="dark"] body{background:var(--crm-bg);color:var(--crm-ink)}
+html[data-crm-theme="dark"] .sidebar{background:linear-gradient(180deg,#101b2e,#0c1524);border-right:1px solid #24334b;box-shadow:none}
+html[data-crm-theme="dark"] .logo{border-color:#283650}
+html[data-crm-theme="dark"] :is(.logo small,.sideCaption,.switcherLabel){color:#92a9ce}
+html[data-crm-theme="dark"] .sidebar nav{scrollbar-width:thin;scrollbar-color:#344a6a transparent}
+html[data-crm-theme="dark"] .sidebar nav button{color:#afbed5;min-height:43px;padding:11px 14px;font-weight:600}
+html[data-crm-theme="dark"] .sidebar nav button:hover{background:#192b45;color:#f4f7ff}
+html[data-crm-theme="dark"] .sidebar nav button.active{background:linear-gradient(90deg,#263e70,#1a2d4f);color:#fff;box-shadow:inset 0 0 0 1px #395687}
+html[data-crm-theme="dark"] .sidebar nav button.active::before{background:#83a8ff}
+html[data-crm-theme="dark"] :is(.workspaceSwitcher,.secure){background:#142238;border-color:#2b3d58}
+html[data-crm-theme="dark"] .workspaceSwitchButton{background:transparent;color:#c3d1e7}
+html[data-crm-theme="dark"] .workspaceSwitchButton.selected{background:#233c6c;color:#eef3ff;border-color:#4b6da5;box-shadow:none}
+html[data-crm-theme="dark"] .workspaceSwitchButton small{color:#a5b9dc}
+html[data-crm-theme="dark"] .profile{background:transparent;border-color:#293a54}
+html[data-crm-theme="dark"] :is(.profile b,.logo b){color:#eef3fc}
+html[data-crm-theme="dark"] .signout{color:#aebed5}
+html[data-crm-theme="dark"] .signout:hover{background:#192b45;color:white}
+html[data-crm-theme="dark"] .topbar{background:#101b2ef5;border-color:#273750;box-shadow:0 4px 18px #050b151a}
+html[data-crm-theme="dark"] :is(.tableCard,.statusOverview,.drawer,.crmEmailComposer,.usageHistory,.authCard,.opsCard,.reminderPanel){background:var(--crm-surface)!important;border-color:var(--crm-border)!important;color:var(--crm-ink);box-shadow:var(--crm-shadow)}
+html[data-crm-theme="dark"] .pageHeading{background:radial-gradient(ellipse at 95% 0%,#24447470,transparent 65%),linear-gradient(110deg,#15243a,#152238)!important;border-color:#2b4161!important;color:var(--crm-ink)}
+html[data-crm-theme="dark"] .pageHeading::after{border-color:#5474a425;box-shadow:0 0 0 45px #5489e505,0 0 0 93px #5489e504}
+html[data-crm-theme="dark"] :is(h1,h2,h3,h4,.metricNumber,.person b,.holding,.breadcrumb b,.crmEmailHead h3,.usageHistory h2,.queueInfo>b){color:#edf3fd!important}
+html[data-crm-theme="dark"] :is(p,small,.metricLabel,.metricHint,.pageHeading p,.tableHeading p,.crmEmailHead p,.crmEmailLabel,.formGrid label,.crmEmailMessageTop span,.usageExplanation,.profile small,.opsHead p,.opsItem span,.opsFilter,.opsConfirm){color:var(--crm-muted)}
+html[data-crm-theme="dark"] :is(.eyebrow,.reference,.rowEdit,.crmEmailMessageTop button,.opsCard a){color:#a0bcff}
+html[data-crm-theme="dark"] :is(.breadcrumbRoot,.breadcrumb .breadcrumbRoot){color:#91a5c6}
+html[data-crm-theme="dark"] .breadcrumbSlash{color:#526786}
+html[data-crm-theme="dark"] .metric{background:linear-gradient(145deg,#17263c,#121e30)!important;border-color:#2a3b55!important;box-shadow:0 6px 22px #02081224}
+html[data-crm-theme="dark"] .metric:hover{border-color:#47608a!important;box-shadow:0 10px 28px #02081240}
+html[data-crm-theme="dark"] .metric::before{opacity:1}
+html[data-crm-theme="dark"] .metric::after{opacity:.075}
+html[data-crm-theme="dark"] .metricLabel{color:#b0bfd8;font-size:12px}
+html[data-crm-theme="dark"] .metricHint{color:#95a8c5}
+html[data-crm-theme="dark"] .metricIcon.indigo{background:#243961;color:#a9c2ff}
+html[data-crm-theme="dark"] .metricIcon.emerald{background:#163e37;color:#6fe3b0}
+html[data-crm-theme="dark"] .metricIcon.amber{background:#443624;color:#f5cc81}
+html[data-crm-theme="dark"] .metricIcon.violet{background:#342d53;color:#cfb4ff}
+html[data-crm-theme="dark"] :is(.avatar,.personAvatar,.myProfileAvatar,.employeeAvatar){background:#263b64;color:#b6cbff}
+html[data-crm-theme="dark"] .topActions .smallAvatar{border-color:#182840;box-shadow:0 0 0 1px #425d86}
+html[data-crm-theme="dark"] :is(.topRole,.headingPill,.headingContext){background:#1c2e4c;color:#bdcff2;border-color:#344d76}
+html[data-crm-theme="dark"] .connected{background:#14332e;color:#97d9bd;border-color:#285246}
+html[data-crm-theme="dark"] :is(.searchBox,.selectBox,input,select,textarea,.crmEmailBody,.themeControl select,.toolbar select){background:#0d1829!important;color:#e2ebfb!important;border-color:#354965!important}
+html[data-crm-theme="dark"] :is(input,textarea)::placeholder{color:#8296b6;opacity:1}
+html[data-crm-theme="dark"] .searchBox input{background:transparent!important}
+html[data-crm-theme="dark"] :is(.searchBox,.selectBox){color:#95add4}
+html[data-crm-theme="dark"] :is(.searchBox,.selectBox):focus-within{border-color:#7b9df3!important;box-shadow:0 0 0 3px #7b9df31f}
+html[data-crm-theme="dark"] :is(input,select,textarea):focus{border-color:#7b9df3!important;box-shadow:0 0 0 3px #7b9df31f}
+html[data-crm-theme="dark"] :is(button,a):focus-visible{outline:2px solid #a9c3ff;outline-offset:3px}
+html[data-crm-theme="dark"] :is(.searchBox input,.selectBox select):focus{box-shadow:none}
+html[data-crm-theme="dark"] .primary{background:#4c6ce5;border-color:#6382f3;color:#fff;box-shadow:0 4px 12px #3455d426}
+html[data-crm-theme="dark"] .primary:hover:not(:disabled){background:#4868d8;border-color:#89a0ff}
+html[data-crm-theme="dark"] :is(.secondary,.quiet,.queueTab,.usageControl,.tableFooter button){background:#1b2c45;color:#cbd9ef;border-color:#354b6b;box-shadow:none}
+html[data-crm-theme="dark"] :is(.secondary,.quiet,.queueTab,.tableFooter button):hover:not(:disabled){background:#263d5e;border-color:#5675a1;color:#f0f5ff}
+html[data-crm-theme="dark"] button:disabled{opacity:1;cursor:not-allowed;filter:none}
+html[data-crm-theme="dark"] :is(.primary,.secondary,.quiet,.tableFooter button):disabled{background:#18283e;color:#8496b3;border-color:#2c405c;box-shadow:none}
+html[data-crm-theme="dark"] .danger{background:#3a2331;border-color:#744058;color:#ffb6c4}
+html[data-crm-theme="dark"] .danger:hover:not(:disabled){background:#512b3d;border-color:#aa5873}
+html[data-crm-theme="dark"] .statusTile{--status-accent:#8da9ef;background:#17263a!important;border-color:#2c3e59!important;border-top:2px solid var(--status-accent)!important;min-height:113px}
+html[data-crm-theme="dark"] .statusTile strong{color:#eff4ff}
+html[data-crm-theme="dark"] .statusTile span{color:#b9c9e2;font-size:11.5px}
+html[data-crm-theme="dark"] .statusTile small{color:#91a7c7}
+html[data-crm-theme="dark"] .statusTile:hover{background:#203450!important;border-color:#5d7da8!important;box-shadow:0 7px 16px #02081233}
+html[data-crm-theme="dark"] :is(.statusTile[aria-pressed="true"],.statusTotal){background:linear-gradient(135deg,#223c66,#192b47)!important;border-color:#4b6da2!important}
+html[data-crm-theme="dark"] .statusTotal strong{color:#bad0ff}
+html[data-crm-theme="dark"] .statusTile:is([data-status="CONVERTED"],[data-status="CLOSED"]){--status-accent:#59cfa4}
+html[data-crm-theme="dark"] .statusTile:is([data-status="FOLLOW UP"],[data-status="POTENTIAL"]){--status-accent:#e7b66c}
+html[data-crm-theme="dark"] .statusTile:is([data-status="VISIT"],[data-status="INTERNATIONAL"]){--status-accent:#b69af2}
+html[data-crm-theme="dark"] .statusTile:is([data-status="LOSS"],[data-status="NOT REACHABLE"]){--status-accent:#ee93a5}
+html[data-crm-theme="dark"] .statusTile:is([data-status="RINGING NOT RESPONDING"],[data-status="REMINING"]){--status-accent:#8ea8c6}
+html[data-crm-theme="dark"] .stage{background:#233857;color:#bdd1ff;border:1px solid #3b5276;padding:6px 9px;font-size:10px;letter-spacing:.15px}
+html[data-crm-theme="dark"] .stage:is(.converted,.closed){background:#173d34;color:#8ee7bf;border-color:#2d6553}
+html[data-crm-theme="dark"] .stage:is(.potential,.follow-up){background:#3c3223;color:#f5ce8e;border-color:#6e5633}
+html[data-crm-theme="dark"] .stage:is(.visit,.international){background:#332b4d;color:#d2baff;border-color:#5d4c85}
+html[data-crm-theme="dark"] .stage:is(.loss,.not-reachable){background:#3c2736;color:#f9b1c2;border-color:#704254}
+html[data-crm-theme="dark"] .stage:is(.remining,.ringing-not-responding,.untouched,.new){background:#223247;color:#bdcce2;border-color:#3c506c}
+html[data-crm-theme="dark"] :is(thead,th){background:#1b2c44;color:#acbed9;border-color:#30435e}
+html[data-crm-theme="dark"] th{font-size:10px;font-weight:700;padding-top:16px;padding-bottom:16px}
+html[data-crm-theme="dark"] td{color:#becce1;border-color:#26384f}
+html[data-crm-theme="dark"] tbody tr:nth-child(even){background:#152338}
+html[data-crm-theme="dark"] tbody tr:hover{background:#1e3350}
+html[data-crm-theme="dark"] .person small{color:#8fa5c6}
+html[data-crm-theme="dark"] :is(.tableFooter,.queueTabs,.queueItem){border-color:#2a3b53}
+html[data-crm-theme="dark"] .tableFooter{background:#101c2e;color:#9aafce}
+html[data-crm-theme="dark"] .tableFooter b{color:#d5e2f7}
+html[data-crm-theme="dark"] :is(.queueEmpty,.queueItem){background:#132136!important;border-color:#2a3b53!important}
+html[data-crm-theme="dark"] .queueItem:hover{background:#1c304c!important}
+html[data-crm-theme="dark"] .queueEmpty b{color:#d5e3f6}
+html[data-crm-theme="dark"] :is(.queueEmpty span,.queueMeta,.queueInfo>span){color:#9aafce}
+html[data-crm-theme="dark"] .queueMeta strong{color:#f0c483}
+html[data-crm-theme="dark"] .queueEmpty svg{background:#1b3e35;color:#83d9b4}
+html[data-crm-theme="dark"] .queueTab.active{background:#294270;border-color:#5274ab;color:#d1dfff}
+html[data-crm-theme="dark"] .followupNotice{background:#193c32;color:#a3ddbf}
+html[data-crm-theme="dark"] :is(.drawerHead,.crmEmailHead){background:linear-gradient(125deg,#17283f,#132136)!important;border-color:#30425c}
+html[data-crm-theme="dark"] :is(.drawerBody,.crmEmailContent){background:#121e30;color:var(--crm-ink)}
+html[data-crm-theme="dark"] .drawerFooter{background:#142238!important;border-color:#30425c;box-shadow:0 -6px 24px #040c191f}
+html[data-crm-theme="dark"] .drawer{box-shadow:-18px 0 80px #02081270}
+html[data-crm-theme="dark"] .leadWindowTabs{background:#132136;border-color:#2e425f}
+html[data-crm-theme="dark"] .leadWindowTabs button{color:#a9bddc}
+html[data-crm-theme="dark"] .leadWindowTabs button.active{background:#223b63;color:#c9dcff;border-bottom-color:#90b0ff}
+html[data-crm-theme="dark"] .iconButton{color:#afc3e3}
+html[data-crm-theme="dark"] .historyEntry{border-color:#5574b9;background:#17283e;padding:14px 16px;border-radius:0 10px 10px 0}
+html[data-crm-theme="dark"] .historyEntry p{color:#cfdbed;line-height:1.7}
+html[data-crm-theme="dark"] .historyEntry small{color:#a8bfdf}
+html[data-crm-theme="dark"] .historyEntry summary{color:#a9c3ff}
+html[data-crm-theme="dark"] .crmEmailPreview{background:#101c2d;color:#dce7f7;border-color:#374d6e}
+html[data-crm-theme="dark"] .crmEmailPreview :is(th,td){background:transparent;color:#dce7f7;border-color:#4e6381!important}
+html[data-crm-theme="dark"] .crmEmailPreview tr:nth-child(even),html[data-crm-theme="dark"] .crmEmailPreview tr:hover{background:transparent}
+html[data-crm-theme="dark"] .crmEmailFrom{background:#1c3152;border-color:#3b5680}
+html[data-crm-theme="dark"] :is(.crmEmailFrom b,.crmEmailFrom span){color:#c1d3f3}
+html[data-crm-theme="dark"] :is(.crmEmailFrom small,.crmEmailHelp,.usageControl small){color:#a0b5d5}
+html[data-crm-theme="dark"] :is(.crmEmailNote,.crmEmailFeedback){background:#1b2e49;color:#b8cce9;border-color:#496792}
+html[data-crm-theme="dark"] .crmEmailHead h3 svg{color:#9fbaff}
+html[data-crm-theme="dark"] :is(.opsCard fieldset,.opsItem,.opsDetail,.reminderPanel header,.usageHistory header,.myProfileAccess){border-color:#30445f}
+html[data-crm-theme="dark"] .opsSuccess{background:#173d32;color:#9de3be;border-color:#346650}
+html[data-crm-theme="dark"] .alert{background:#3c2532;border-color:#744152;color:#ffc1cc}
+html[data-crm-theme="dark"] .bulkActions{background:#172b47;border-color:#3a5276;color:#cfdef5}
+html[data-crm-theme="dark"] .bulkSelectionCount{background:#2b4572;color:#d1e0ff}
+html[data-crm-theme="dark"] .bulkActions small{color:#b9cde9}
+html[data-crm-theme="dark"] .footerText{color:#8399ba;line-height:1.7}
+html[data-crm-theme="dark"] :is(.sidebar,.tableScroll,.drawerBody,.queueList,.usageHistoryContent){scrollbar-width:thin;scrollbar-color:#3b5275 transparent}
+html[data-crm-theme="dark"] .employeeHeader{background:radial-gradient(ellipse at 100% 0%,#294c7b70,transparent 70%),#142238!important}
+@media(max-height:850px) and (min-width:851px){.sidebar .logo{padding-bottom:19px;margin-bottom:18px}.sidebar .secure{margin-bottom:10px}.sidebar .sideBottom{padding-top:10px}.sidebar .workspaceSwitcher{padding:8px;margin-bottom:9px}.sidebar nav button{min-height:40px;padding-top:10px;padding-bottom:10px}}

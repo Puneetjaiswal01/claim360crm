@@ -1,5 +1,5 @@
 "use client";
-import {useEffect,useMemo,useState} from "react";
+import {useEffect,useMemo,useRef,useState} from "react";
 import {Check,ClipboardCopy,ExternalLink,Mail,RotateCcw,X} from "lucide-react";
 
 type Props={
@@ -9,6 +9,7 @@ type Props={
  registeredAddress:string|null|undefined;
  holdingValue:string|null|undefined;
  onClose:()=>void;
+ onDirtyChange?:(dirty:boolean)=>void;
 };
 
 const normalize=(value:string|null|undefined)=>String(value??"").replace(/\s+/g," ").trim();
@@ -83,13 +84,26 @@ function formattedDraft(body:string){
  return '<div style="font-family:Arial,sans-serif;font-size:14px;line-height:1.7;overflow-wrap:anywhere">'+parts.join("")+"</div>";
 }
 
-export default function EmailComposer({email,name,company,registeredAddress,holdingValue,onClose}:Props){
+export default function EmailComposer({email,name,company,registeredAddress,holdingValue,onClose,onDirtyChange}:Props){
  const cleanedName=normalize(name),cleanedCompany=normalize(company),cleanedAddress=normalize(registeredAddress),cleanedValue=normalize(holdingValue);
  const emailOptions=useMemo(()=>Array.from(new Set((email||"").match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi)||[])),[email]);
- const [recipient,setRecipient]=useState(emailOptions[0]||"");
- const [subject,setSubject]=useState(()=>subjectFor(cleanedName,cleanedCompany));
- const [body,setBody]=useState(()=>draftFor(cleanedName,cleanedCompany,cleanedAddress,cleanedValue));
- useEffect(()=>{setSubject(subjectFor(cleanedName,cleanedCompany));setBody(draftFor(cleanedName,cleanedCompany,cleanedAddress,cleanedValue))},[cleanedName,cleanedCompany,cleanedAddress,cleanedValue]);
+ const defaultRecipient=emailOptions[0]||"";
+ const defaultSubject=subjectFor(cleanedName,cleanedCompany);
+ const defaultBody=draftFor(cleanedName,cleanedCompany,cleanedAddress,cleanedValue);
+ const [recipient,setRecipient]=useState(defaultRecipient);
+ const [subject,setSubject]=useState(defaultSubject);
+ const [body,setBody]=useState(defaultBody);
+ const generated=useRef({recipient:defaultRecipient,subject:defaultSubject,body:defaultBody});
+ // Refresh generated fields after lead edits without overwriting customized email text.
+ useEffect(()=>{
+  const previous=generated.current;
+  setRecipient(current=>current===previous.recipient?defaultRecipient:current);
+  setSubject(current=>current===previous.subject?defaultSubject:current);
+  setBody(current=>current===previous.body?defaultBody:current);
+  generated.current={recipient:defaultRecipient,subject:defaultSubject,body:defaultBody};
+ },[defaultRecipient,defaultSubject,defaultBody]);
+ const dirty=recipient!==defaultRecipient||subject!==defaultSubject||body!==defaultBody;
+ useEffect(()=>{onDirtyChange?.(dirty)},[dirty,onDirtyChange]);
  const [copied,setCopied]=useState<"subject"|"body"|"all"|"formatted"|null>(null);
  const [notice,setNotice]=useState("");
  const [showPreview,setShowPreview]=useState(true);
@@ -140,7 +154,7 @@ export default function EmailComposer({email,name,company,registeredAddress,hold
    <button type="button" className="secondary" aria-pressed={showPreview} onClick={()=>setShowPreview(!showPreview)}>{showPreview?"Edit wording":"Show formatted preview"}</button>
    {showPreview&&<div aria-label="Formatted email preview" className="crmEmailPreview" dangerouslySetInnerHTML={{__html:htmlBody}}/>}
    {!showPreview&&<textarea aria-label="Edit email wording" className="crmEmailBody" value={body} onChange={e=>setBody(e.target.value)} rows={17} spellCheck={true}/>}
-   <div className="crmEmailNote">Wording follows your reference template. Review the lead details and regulatory note before sending. Use Copy formatted message to retain the table; Gmail and other email app links prepare plain-text drafts. Sending and delivery tracking are not yet connected to the CRM.</div>
+   <div className="crmEmailNote">Email edits are temporary in this workspace. Copy your message or open it in your email app before leaving. Saving lead details does not save email drafts. Wording follows your reference template. Review the lead details and regulatory note before sending. Use Copy formatted message to retain the table; Gmail and other email app links prepare plain-text drafts. Sending and delivery tracking are not yet connected to the CRM.</div>
    {notice&&<p className="crmEmailFeedback" role="status">{notice}</p>}
    <div className="crmEmailButtonRow">
     <button type="button" className="secondary" onClick={copyFormatted}>{copied==="formatted"?<Check size={15}/>:<ClipboardCopy size={15}/>} Copy formatted message</button>

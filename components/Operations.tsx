@@ -4,7 +4,7 @@ import {supabase} from "@/lib/supabase";
 import {encryptBackup,decryptBackup,download,Envelope} from "@/lib/backup";
 type Row=Record<string,any>;
 type Member={user_id:string;email:string;display_name?:string;role:string};
-type Props={view:string;userId:string;ownerId?:string;admin:boolean;members:Member[];onOpen:(lead:any)=>void;onChanged:()=>Promise<void>};
+type Props={view:string;userId:string;ownerId?:string;admin:boolean;members:Member[];refreshKey:number;onOpen:(lead:any)=>void;onChanged:()=>Promise<void>};
 export const OPS_VIEWS=["Visits","Calls & activity","Activity reports","Audit trail","Duplicates","Backups"];
 const day=()=>new Date(Date.now()+19800000).toISOString().slice(0,10);
 const ist=(value:string)=>new Date(value).toLocaleString("en-IN",{timeZone:"Asia/Kolkata",dateStyle:"medium",timeStyle:"short"});
@@ -20,7 +20,7 @@ async function rows(table:string,ownerId?:string):Promise<Row[]>{
  const {data,error}=await q;if(error)throw new Error(error.message);all.push(...(data||[]));if(!data||data.length<500)return all;
  }throw new Error("Too many records. Contact an administrator to narrow the report.");
 }
-export default function Operations({view,userId,ownerId,admin,members,onOpen,onChanged}:Props){
+export default function Operations({view,userId,ownerId,admin,members,refreshKey,onOpen,onChanged}:Props){
  const [leads,setLeads]=useState<Row[]>([]),[visits,setVisits]=useState<Row[]>([]),[activity,setActivity]=useState<Row[]>([]),[activeDays,setActiveDays]=useState<Row[]>([]),[events,setEvents]=useState<Row[]>([]),[merges,setMerges]=useState<Row[]>([]);
  const [loading,setLoading]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState(""),[message,setMessage]=useState("");
  const [search,setSearch]=useState(""),[leadId,setLeadId]=useState(""),[editVisit,setEditVisit]=useState<string|null>(null);
@@ -44,7 +44,7 @@ export default function Operations({view,userId,ownerId,admin,members,onOpen,onC
    }
   }catch(e){setError(e instanceof Error?e.message:"Could not load records");}finally{setLoading(false);}
  },[view,ownerId,auditPage,auditEntity]);
- useEffect(()=>{void load()},[load]);
+ useEffect(()=>{void load()},[load,refreshKey]);
  const choices=useMemo(()=>leads.filter(l=>!search||[l.shareholder_name,l.company,l.ref_id,l.mobile_number,l.email].some(v=>String(v||"").toLowerCase().includes(search.toLowerCase()))).slice(0,100),[leads,search]);
  const chooseLead=(id:string)=>{setLeadId(id);const l=leads.find(x=>x.id===id);if(l){setLocation(l.registered_address||"");setAssignee(l.owner_id);}};
  const resetVisit=()=>{setEditVisit(null);setLeadId("");setSearch("");setDate("");setLocation("");setAssignee(userId);setVisitStatus("PLANNED");setOutcome("");setNextAction("");setNotes("");};

@@ -107,7 +107,7 @@ export default function EmailComposer({email,name,company,registeredAddress,hold
    try{await navigator.clipboard.writeText(value);setCopied(kind);setNotice("Copied. You can paste this into your email.");}
    catch{setNotice("Clipboard permission was blocked. Please select and copy the text manually.")}
  };
- const valid=recipient.trim()!==""&&subject.trim()!==""&&body.trim()!=="";
+ const valid=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipient.trim())&&subject.trim()!==""&&body.trim()!=="";
  const compose=(provider:"gmail"|"default")=>{
   if(!valid){setNotice("Please enter a recipient, subject and message.");return}
   const to=encodeURIComponent(recipient);

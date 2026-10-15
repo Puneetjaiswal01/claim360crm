@@ -34,6 +34,7 @@ export default function Home(){
  const [navigationIds,setNavigationIds]=useState<string[]>([]),[navigationBusy,setNavigationBusy]=useState(false),[contactAt,setContactAt]=useState<string|null>(null);
  const navigationSequence=useRef(0);
  const draftState=useRef({dirty:false,busy:false});
+ const editorSnapshot=useRef<{lead:Lead|null|undefined;form:Record<string,any>}>({lead:undefined,form:{}});
  const [statusMessage,setStatusMessage]=useState("");
  const editorId=useRef<string|null>(null);
  const [leadTab,setLeadTab]=useState<"details"|"email"|"activity">("details");
@@ -50,6 +51,7 @@ export default function Home(){
  const detailsDirty=selected!==undefined&&Object.keys(empty()).some(k=>String(form[k]??"")!==String((selected?leadForm(selected):empty() as any)[k]??""));
  const hasDraft=detailsDirty||!!note.trim();
  draftState.current={dirty:hasDraft,busy:saving||navigationBusy};
+ editorSnapshot.current={lead:selected,form};
  const canLeave=()=>!draftState.current.busy&&(!draftState.current.dirty||window.confirm("Discard your unsaved changes and leave this lead?"));
  const closeWorkspace=()=>{if(!canLeave())return;navigationSequence.current++;editorId.current=null;setSelected(undefined);setError("");setNote("");setStatusMessage("")};
  useEffect(()=>{supabase.auth.getSession().then(({data})=>{setSession(data.session);setAuthReady(true)});const {data:{subscription}}=supabase.auth.onAuthStateChange((_event,s)=>setSession(s));return ()=>subscription.unsubscribe()},[]);
@@ -60,7 +62,7 @@ export default function Home(){
  useEffect(()=>{if(!session)return;let cancelled=false;(async()=>{const since=new Date(Date.now()-7*86400000).toISOString();const forScope=(q:any)=>ownScope?q.eq("owner_id",ownScope):q;const [all,recent,...counts]=await Promise.all([forScope(supabase.from("leads").select("id",{count:"exact",head:true}).is("archived_at",null)),forScope(supabase.from("leads").select("id",{count:"exact",head:true}).is("archived_at",null).gte("created_at",since)),...STAGES.map(s=>forScope(supabase.from("leads").select("id",{count:"exact",head:true}).is("archived_at",null).eq("status",s)))]);if(cancelled)return;const byStatus=Object.fromEntries(STAGES.map((name,i)=>[name,counts[i].count||0]));setCountsScope(ownScope);setStatusCounts(byStatus);setRecentCount(recent.count||0);setStats({total:all.count||0,converted:byStatus["CONVERTED"]||0,potential:byStatus["POTENTIAL"]||0,followup:byStatus["FOLLOW UP"]||0})})();return()=>{cancelled=true}},[session,total,refreshKey,ownScope]);
  useEffect(()=>{if(!session||view!=="Reports")return;let active=true;(async()=>{const all:any[]=[];for(let from=0;from<100000;from+=1000){let request=supabase.from("leads").select("owner_id,status,followup_date,followup_completed_at").is("archived_at",null).order("created_at",{ascending:false}).range(from,from+999);if(ownScope)request=request.eq("owner_id",ownScope);const {data,error:e}=await request;if(e){setError(e.message);return}all.push(...(data||[]));if((data||[]).length<1000)break}if(active)setReportData(all)})();return()=>{active=false}},[session,view,refreshKey,total,ownScope]);
  const login=async(signup:boolean)=>{setAuthBusy(true);setAuthError("");const result=signup?await supabase.auth.signUp({email:email.trim(),password}):await supabase.auth.signInWithPassword({email:email.trim(),password});setAuthBusy(false);setAuthError(result.error?.message||(signup&&!result.data.session?"Check your email for confirmation.":""))};
- const showLead=(lead?:Lead)=>{editorId.current=lead?.id||null;setStatusMessage("");setError("");setLeadTab("details");setEmailVisited(false);setDrawerMaximized(true);setSelected(lead||null);setForm(lead?leadForm(lead):empty());setNote("");setRecipient("");setContactAt(null)};
+ const showLead=(lead?:Lead)=>{drawerBodyRef.current?.scrollTo({top:0});editorId.current=lead?.id||null;setStatusMessage("");setError("");setLeadTab("details");setEmailVisited(false);setDrawerMaximized(true);setSelected(lead||null);setForm(lead?leadForm(lead):empty());setNote("");setRecipient("");setContactAt(null)};
  const open=async(lead?:Lead,ids?:string[])=>{
   showLead(lead);const sequence=++navigationSequence.current;setNavigationIds(ids?Array.from(new Set(ids)):[]);
   if(!lead||ids)return;
@@ -77,6 +79,18 @@ export default function Home(){
  const liveRefresh=useCallback(()=>{void load();setRefreshKey(k=>k+1)},[load]);
  const liveState=useLeadRealtime(session?.user?.id,liveRefresh);
  useEffect(()=>{editorId.current=selected?.id||null},[selected]);
+ useEffect(()=>{
+  if(!selected||saving)return;let cancelled=false;const id=selected.id;
+  (async()=>{const r=await supabase.from("leads").select("*").is("archived_at",null).eq("id",id).maybeSingle();if(cancelled||r.error)return;
+   const current=editorSnapshot.current;if(current.lead?.id!==id)return;
+   if(!r.data){setError("This lead is no longer available. Return to the list to check its assignment.");return;}
+   const fresh=r.data as Lead;if(fresh.updated_at===current.lead.updated_at||Date.parse(fresh.updated_at)<Date.parse(current.lead.updated_at))return;
+   const baseline=leadForm(current.lead),latest=leadForm(fresh);const dirtyKeys=Object.keys(empty()).filter(k=>String(current.form[k]??"")!==String(baseline[k]??""));
+   if(dirtyKeys.some(k=>String(latest[k]??"")!==String(baseline[k]??""))){setError("Another team member changed a field you are editing. Your draft is preserved. Close and reopen this lead before saving.");setSelected(old=>old?.id===id?{...old,activities:fresh.activities}:old);return;}
+   setSelected(fresh);setForm({...latest,...Object.fromEntries(dirtyKeys.map(k=>[k,current.form[k]]))});
+  })();return()=>{cancelled=true};
+ },[refreshKey,selected?.id,saving]);
+
  const changeStatus=async(next:string)=>{
   if(saving)return;
   if(!selected){setForm((current:any)=>({...current,status:next}));return;}

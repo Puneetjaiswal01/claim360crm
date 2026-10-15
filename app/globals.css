@@ -383,3 +383,6 @@ html[data-crm-theme="dark"] :is(.opsItem span,.opsHead p,.opsFilter,.opsConfirm)
 html[data-crm-theme="dark"] .opsSuccess{color:#8ce6b6;background:#1c4035;border-color:#356b55}
 html[data-crm-theme="dark"] .opsCard a{color:#9bb3ff}
 @media(max-width:700px){.opsCard{padding:18px}.opsHead,.opsItem{flex-direction:column}.opsCard .formGrid{grid-template-columns:1fr}.opsCard fieldset{padding:14px}.opsFilter{align-items:flex-start;flex-direction:column}.reminderPanel{top:100px;right:12px;width:calc(100vw - 24px);max-height:calc(100dvh - 112px)}}
+
+/* Keep decorative metric circles inside cards on narrow screens. */
+.metric{overflow:hidden}

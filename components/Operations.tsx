@@ -4,7 +4,7 @@ import {supabase} from "@/lib/supabase";
 import {encryptBackup,decryptBackup,download,Envelope} from "@/lib/backup";
 type Row=Record<string,any>;
 type Member={user_id:string;email:string;display_name?:string;role:string};
-type Props={view:string;userId:string;ownerId?:string;admin:boolean;members:Member[];refreshKey:number;onOpen:(lead:any)=>void;onChanged:()=>Promise<void>};
+type Props={view:string;userId:string;ownerId?:string;admin:boolean;members:Member[];refreshKey:number;onOpen:(lead:any,ids?:string[])=>void;onChanged:()=>Promise<void>};
 export const OPS_VIEWS=["Visits","Calls & activity","Activity reports","Audit trail","Duplicates","Backups"];
 const day=()=>new Date(Date.now()+19800000).toISOString().slice(0,10);
 const ist=(value:string)=>new Date(value).toLocaleString("en-IN",{timeZone:"Asia/Kolkata",dateStyle:"medium",timeStyle:"short"});
@@ -49,7 +49,7 @@ export default function Operations({view,userId,ownerId,admin,members,refreshKey
  const chooseLead=(id:string)=>{setLeadId(id);const l=leads.find(x=>x.id===id);if(l){setLocation(l.registered_address||"");setAssignee(l.owner_id);}};
  const resetVisit=()=>{setEditVisit(null);setLeadId("");setSearch("");setDate("");setLocation("");setAssignee(userId);setVisitStatus("PLANNED");setOutcome("");setNextAction("");setNotes("");};
  async function work(action:()=>Promise<void>){if(busy)return;setBusy(true);setError("");setMessage("");try{await action()}catch(e){setError(e instanceof Error?e.message:"Action failed");}finally{setBusy(false);}}
- const openLead=async(id:string)=>{const r=await supabase.from("leads").select("*").is("archived_at",null).eq("id",id).single();if(r.error){setError("This lead is not in your current workspace. Ask an administrator to review its assignment.");return;}onOpen(r.data)};
+ const openLead=async(id:string)=>{const r=await supabase.from("leads").select("*").is("archived_at",null).eq("id",id).single();if(r.error){setError("This lead is not in your current workspace. Ask an administrator to review its assignment.");return;}onOpen(r.data,leads.filter(l=>!search||[l.shareholder_name,l.company,l.ref_id,l.mobile_number,l.email].some(v=>String(v||"").toLowerCase().includes(search.toLowerCase()))).map(l=>l.id))};
  async function saveVisit(e:React.FormEvent){e.preventDefault();await work(async()=>{
   if(!leadId||!date||!location.trim())throw new Error("Select a lead, visit time and location.");
   const data={lead_id:leadId,assigned_to:assignee,scheduled_at:utc(date),location:location.trim(),status:visitStatus,outcome:outcome.trim(),next_action:nextAction.trim(),notes:notes.trim()};

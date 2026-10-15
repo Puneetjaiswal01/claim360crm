@@ -4,13 +4,13 @@ import {supabase} from "@/lib/supabase";
 import {PhoneCall,CheckCircle2,Clock3,CalendarDays,RefreshCw} from "lucide-react";
 type Task={id:string;shareholder_name:string;company:string|null;mobile_number:string|null;followup_date:string|null;followup_time:string|null;status:string;ref_id:string|null;followup_completed_at:string|null};
 const localDay=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
-export default function FollowupQueue({onOpen,onChanged,refreshKey,ownerId}:{onOpen:(lead:any)=>void;onChanged:()=>Promise<void>;refreshKey:number;ownerId?:string}){
+export default function FollowupQueue({onOpen,onChanged,refreshKey,ownerId}:{onOpen:(lead:any,ids?:string[])=>void;onChanged:()=>Promise<void>;refreshKey:number;ownerId?:string}){
  const [tasks,setTasks]=useState<Task[]>([]),[loading,setLoading]=useState(true),[error,setError]=useState(""),[busy,setBusy]=useState(""),[tab,setTab]=useState<"due"|"upcoming">("due");
  const today=localDay();
  const load=useCallback(async()=>{setLoading(true);setError("");let q=supabase.from("leads").select("id,shareholder_name,company,mobile_number,followup_date,followup_time,status,ref_id,followup_completed_at").is("archived_at",null).not("followup_priority_date","is",null).order("followup_priority_date",{ascending:true}).order("followup_time",{ascending:true,nullsFirst:true}).limit(300);if(ownerId)q=q.eq("owner_id",ownerId);q=tab==="due"?q.lte("followup_priority_date",today):q.gt("followup_priority_date",today);const {data,error:e}=await q;if(e)setError(e.message);else setTasks((data||[]) as Task[]);setLoading(false)},[tab,today,ownerId]);
  useEffect(()=>{load()},[load,refreshKey]);
  const complete=async(id:string)=>{setBusy(id);const {error:e}=await supabase.from("leads").update({followup_completed_at:new Date().toISOString()}).eq("id",id);setBusy("");if(e)setError(e.message);else{await load();await onChanged()}};
- const openFull=async(id:string)=>{const {data,error:e}=await supabase.from("leads").select("*").is("archived_at",null).eq("id",id).single();if(e)setError(e.message);else if(data)onOpen(data)};
+ const openFull=async(id:string)=>{const {data,error:e}=await supabase.from("leads").select("*").is("archived_at",null).eq("id",id).single();if(e)setError(e.message);else if(data)onOpen(data,tasks.map(t=>t.id))};
  const dial=(phone:string|null)=>{if(phone)window.location.href="tel:"+phone.replace(/[^\d+]/g,"")};
  return <section className="tableCard followupCard"><div className="tableHeading"><div><div className="eyebrow">PRIORITY CALL QUEUE</div><h2>Who needs a call?</h2><p>Due and overdue calls appear first. Complete a call or open a record to reschedule.</p></div><button className="secondary" onClick={load}><RefreshCw size={15}/> Refresh</button></div>
  <div className="queueTabs"><button className={tab==="due"?"queueTab active":"queueTab"} onClick={()=>setTab("due")}><PhoneCall size={15}/> Due & overdue</button><button className={tab==="upcoming"?"queueTab active":"queueTab"} onClick={()=>setTab("upcoming")}><CalendarDays size={15}/> Upcoming</button></div>

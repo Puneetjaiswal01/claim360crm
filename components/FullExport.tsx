@@ -2,12 +2,13 @@
 import {useState} from "react";
 import {supabase} from "@/lib/supabase";
 import {Download} from "lucide-react";
-const columns=["ref_id","shareholder_name","registered_address","company","holding_value","mobile_number","mobile_number_type","email","input_remarks","sales_remarks","status","lead_date","followup_date","followup_time","fee_percent"];
-export default function FullExport({stage,query,ownerId}:{stage:string;query:string;ownerId?:string}){
+const columns=["ref_id","shareholder_name","registered_address","company","holding_value","mobile_number","mobile_number_type","email","input_remarks","sales_remarks","status","lead_date","followup_date","followup_time","fee_percent","city","state","country","country_group","updated_at"];
+export default function FullExport({stage,query,ownerId,countryGroup}:{stage:string;query:string;ownerId?:string;countryGroup?:string}){
  const [busy,setBusy]=useState(false),[error,setError]=useState("");
  const exportAll=async()=>{if(busy)return;setBusy(true);setError("");try{
  const lines=[columns.map(c=>'"'+c+'"').join(",")];let offset=0;
  while(true){let q=supabase.from("leads").select(columns.join(",")).is("archived_at",null).order("created_at",{ascending:false}).range(offset,offset+499);
+ if(countryGroup==="unset")q=q.is("country_group",null);else if(countryGroup)q=q.eq("country_group",countryGroup);
  if(ownerId)q=q.eq("owner_id",ownerId);if(stage==="__RECENT__")q=q.gte("created_at",new Date(Date.now()-7*86400000).toISOString());else if(stage)q=q.eq("status",stage);
  if(query.trim()){const term=query.trim().replace(/[%(),]/g,"");q=q.or("shareholder_name.ilike.%"+term+"%,ref_id.ilike.%"+term+"%,company.ilike.%"+term+"%,mobile_number.ilike.%"+term+"%,email.ilike.%"+term+"%")}
  const {data,error:e}=await q;if(e)throw new Error(e.message);

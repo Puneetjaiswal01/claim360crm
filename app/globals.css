@@ -386,3 +386,14 @@ html[data-crm-theme="dark"] .opsCard a{color:#9bb3ff}
 
 /* Keep decorative metric circles inside cards on narrow screens. */
 .metric{overflow:hidden}
+
+/* Bulk actions follow the selected theme, including their disabled state. */
+.bulkActions{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;gap:12px;margin:12px 0;padding:12px 16px;border:1px solid #dce4f4;border-radius:10px;background:#f4f7ff;color:#243650}
+.bulkSelectionCount{display:inline-flex;align-items:center;min-height:36px;padding:6px 10px;border-radius:8px;background:#e5ecff;color:#304caa;font-size:13px;white-space:nowrap}
+.bulkActions select{min-height:44px;min-width:210px;padding:10px 12px;border:1px solid #d8e1f1;border-radius:9px;background:white;color:#243650;font:inherit}
+.bulkActions .primary:disabled{background:#e0e6f2;color:#53637f;border:1px solid #cbd5e6;opacity:1;box-shadow:none;cursor:not-allowed}
+html[data-crm-theme="dark"] .bulkActions{background:#222b38;border-color:#414c5d;color:#e5ebf5}
+html[data-crm-theme="dark"] .bulkSelectionCount{background:#293a60;color:#c5d4ff}
+html[data-crm-theme="dark"] .bulkActions .primary:disabled{background:#303d52;color:#b5c3d9;border-color:#465772;opacity:1}
+html[data-crm-theme="dark"] .bulkActions small{color:#c7d3e5}
+@media(max-width:650px){.bulkActions select{width:100%;min-width:0}.bulkActions button{flex:1 1 auto}.bulkActions>.primary{flex-basis:100%}}

@@ -5,7 +5,7 @@ import {Clock,Palette,X} from "lucide-react";
 import {supabase} from "@/lib/supabase";
 
 type Usage={session_seconds:number;today_seconds:number;started_at:string;server_time:string};
-type Entry={id:string;started_at:string;last_seen_at:string;ended_at:string|null};
+type Entry={day:string;open_seconds:number;active_seconds:number};
 const duration=(seconds:number)=>{const n=Math.max(0,Math.floor(seconds));return [Math.floor(n/3600),Math.floor(n/60)%60,n%60].map(v=>String(v).padStart(2,"0")).join(":")};
 export default function WorkspaceControls({userId}:{userId:string}){
  const [theme,setTheme]=useState("color");
@@ -19,6 +19,7 @@ export default function WorkspaceControls({userId}:{userId:string}){
  const [historyOpen,setHistoryOpen]=useState(false);
  const [history,setHistory]=useState<Entry[]>([]);
  const [historyError,setHistoryError]=useState("");
+ const [historyLoading,setHistoryLoading]=useState(false);
  const historyRef=useRef<HTMLElement>(null);
  const historyCloseRef=useRef<HTMLButtonElement>(null);
  useEffect(()=>{
@@ -55,8 +56,8 @@ export default function WorkspaceControls({userId}:{userId:string}){
    busy=true;
    try{
     const engaged=document.visibilityState==="visible"&&Date.now()-lastInteraction.current<300000;
-    const [{data,error},active]=await Promise.all([supabase.rpc("crm_usage_tick",{p_end:false}),supabase.rpc("crm_active_tick",{p_active:engaged})]);
-    if(active){if(error||active.error)setStatus("Sync failed");else{setUsage(data as Usage);setSyncedAt(Date.now());setActiveToday(Number(active.data?.active_today_seconds)||0);setActiveSynced(Date.now());setIdle(!engaged);setStatus("Synced")}}
+    const [{data,error},activeResult]=await Promise.all([supabase.rpc("crm_usage_tick",{p_end:false}),supabase.rpc("crm_active_tick",{p_active:engaged})]);
+    if(active){if(error||activeResult.error)setStatus("Sync failed");else{setUsage(data as Usage);setSyncedAt(Date.now());setActiveToday(Number(activeResult.data?.active_today_seconds)||0);setActiveSynced(Date.now());setIdle(!engaged);setStatus("Synced")}}
    }catch{if(active)setStatus("Sync failed")}finally{busy=false}
   };
   const offline=()=>setStatus("Offline");
@@ -69,14 +70,18 @@ export default function WorkspaceControls({userId}:{userId:string}){
  },[userId]);
  const delta=status==="Synced"?Math.min(90,Math.max(0,(now-syncedAt)/1000)):0;
  const activeDelta=status==="Synced"&&!idle?Math.min(30,Math.max(0,(now-activeSynced)/1000)):0;
- const openHistory=async()=>{
-  setHistoryOpen(true);setHistoryError("");
-  const {data,error}=await supabase.from("crm_usage_sessions").select("id,started_at,last_seen_at,ended_at").eq("user_id",userId).order("started_at",{ascending:false}).limit(30);
-  if(error)setHistoryError(error.message);else setHistory((data||[]) as Entry[]);
- };
+ useEffect(()=>{
+  if(!historyOpen)return;let cancelled=false;
+  const refresh=async()=>{setHistoryError("");setHistoryLoading(true);try{
+   const {data,error}=await supabase.rpc("crm_daily_usage",{p_days:30});
+   if(cancelled)return;if(error)setHistoryError("Could not load daily hours. Please close and reopen this window.");else setHistory((data||[]) as Entry[]);
+  }catch{if(!cancelled)setHistoryError("Could not connect. Please try again.");}finally{if(!cancelled)setHistoryLoading(false)}};
+  void refresh();const timer=setInterval(()=>void refresh(),30000);return()=>{cancelled=true;clearInterval(timer)};
+ },[historyOpen,userId]);
+ const openHistory=()=>{setHistory([]);setHistoryOpen(true);setHistoryError("");};
  return <div className="workspaceControls">
   <label className="themeControl"><Palette size={15}/><span className="srOnly">CRM theme</span><select aria-label="CRM theme" value={theme} onChange={e=>changeTheme(e.target.value)}><option value="color">Original color</option><option value="dark">Dark</option></select></label>
-  <button type="button" className="usageControl" onClick={()=>void openHistory()} title="View your login hours"><Clock size={16}/><span><b>Session {usage?duration(Number(usage.session_seconds)+delta):"—"}</b><small>Open today (IST) {usage?duration(Number(usage.today_seconds)+delta):"—"} · {status}</small><small>Active today {duration(activeToday+activeDelta)}{idle?" · Paused":""}</small></span></button>
-  {historyOpen&&createPortal(<div className="usageBackdrop" onMouseDown={e=>{if(e.target===e.currentTarget)setHistoryOpen(false)}}><section ref={historyRef} className="usageHistory" role="dialog" aria-modal="true" aria-labelledby="usageHistoryTitle" aria-describedby="usageHistoryExplanation"><header><div><h2 id="usageHistoryTitle">Your login hours</h2><p>CRM open time · Asia/Kolkata · Last 30 sessions</p></div><button ref={historyCloseRef} type="button" className="iconButton" aria-label="Close login hours" onClick={()=>setHistoryOpen(false)}><X size={20}/></button></header><div className="usageHistoryContent" tabIndex={0} role="region" aria-label="Session history"><p id="usageHistoryExplanation" className="usageExplanation">Updates every 30 seconds. Open time includes inactive tabs. Active time counts visible CRM interaction and pauses after five minutes without activity. Multiple tabs do not double-count active time. Refreshes and multiple tabs share the same login session. Time stops at sign-out or the last successful update if the browser closes or disconnects. These are usage records, not attendance certification.</p>{historyError?<p role="alert">{historyError}</p>:<div className="usageTable"><table><thead><tr><th>Started (IST)</th><th>Last update / logout</th><th>Hours</th></tr></thead><tbody>{history.map(row=><tr key={row.id}><td>{new Date(row.started_at).toLocaleString("en-IN",{timeZone:"Asia/Kolkata"})}</td><td>{new Date(row.ended_at||row.last_seen_at).toLocaleString("en-IN",{timeZone:"Asia/Kolkata"})}</td><td>{duration((Date.parse(row.ended_at||row.last_seen_at)-Date.parse(row.started_at))/1000)}</td></tr>)}</tbody></table>{!history.length&&<p>No usage records yet.</p>}</div>}</div></section></div>,document.body)}
+  <button type="button" className="usageControl" onClick={()=>void openHistory()} title="View your login hours"><Clock size={16}/><span><b>Today {usage?duration(Number(usage.today_seconds)+delta):"—"}</b><small>Active {duration(activeToday+activeDelta)}{idle?" · Paused":""}</small><small>IST · {status}</small></span></button>
+  {historyOpen&&createPortal(<div className="usageBackdrop" onMouseDown={e=>{if(e.target===e.currentTarget)setHistoryOpen(false)}}><section ref={historyRef} className="usageHistory" role="dialog" aria-modal="true" aria-labelledby="usageHistoryTitle" aria-describedby="usageHistoryExplanation"><header><div><h2 id="usageHistoryTitle">Your login hours</h2><p>Daily totals · Asia/Kolkata · Last 30 days</p></div><button ref={historyCloseRef} type="button" className="iconButton" aria-label="Close login hours" onClick={()=>setHistoryOpen(false)}><X size={20}/></button></header><div className="usageHistoryContent" tabIndex={0} role="region" aria-label="Daily login hours"><p id="usageHistoryExplanation" className="usageExplanation">One total per date, updated every 30 seconds. Open hours combine all tabs without double-counting. Active hours pause after five minutes without interaction. Days use India Standard Time (IST).</p>{historyError?<p role="alert">{historyError}</p>:<div className="usageTable"><table><thead><tr><th>Date (IST)</th><th>Open hours</th><th>Active hours</th></tr></thead><tbody>{history.map(row=><tr key={row.day}><td>{new Date(row.day+"T12:00:00+05:30").toLocaleDateString("en-IN",{timeZone:"Asia/Kolkata",dateStyle:"medium"})}</td><td>{duration(Number(row.open_seconds))}</td><td>{duration(Number(row.active_seconds))}</td></tr>)}</tbody></table>{historyLoading&&!history.length?<p role="status">Loading daily hours…</p>:!history.length&&<p>No daily usage records yet.</p>}</div>}</div></section></div>,document.body)}
  </div>;
 }

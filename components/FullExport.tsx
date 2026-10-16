@@ -9,7 +9,7 @@ export default function FullExport({stage,query,ownerId,countryGroup}:{stage:str
  const lines=[columns.map(c=>'"'+c+'"').join(",")];let offset=0;
  while(true){let q=supabase.from("leads").select(columns.join(",")).is("archived_at",null).order("created_at",{ascending:false}).order("id",{ascending:false}).range(offset,offset+499);
  if(countryGroup==="unset")q=q.is("country_group",null);else if(countryGroup)q=q.eq("country_group",countryGroup);
- if(ownerId)q=q.eq("owner_id",ownerId);if(stage==="__RECENT__")q=q.gte("created_at",new Date(Date.now()-7*86400000).toISOString());else if(stage)q=q.eq("status",stage);
+ if(ownerId==="__UNASSIGNED__")q=q.is("owner_id",null);else if(ownerId)q=q.eq("owner_id",ownerId);if(stage==="__RECENT__")q=q.gte("created_at",new Date(Date.now()-7*86400000).toISOString());else if(stage)q=q.eq("status",stage);
  if(query.trim()){const term=query.trim().replace(/[%(),]/g,"");q=q.or("shareholder_name.ilike.%"+term+"%,ref_id.ilike.%"+term+"%,company.ilike.%"+term+"%,mobile_number.ilike.%"+term+"%,email.ilike.%"+term+"%")}
  const {data,error:e}=await q;if(e)throw new Error(e.message);
  for(const lead of data||[]){const row=lead as unknown as Record<string,unknown>;lines.push(columns.map(c=>'"'+String(row[c]??"").replace(/"/g,'""')+'"').join(","))}

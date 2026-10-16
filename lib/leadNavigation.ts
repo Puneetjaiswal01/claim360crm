@@ -4,7 +4,7 @@ export async function fetchLeadNavigation(scope:LeadListScope):Promise<string[]>
  const ids:string[]=[];
  for(let offset=0;offset<100000;offset+=1000){
   let q=supabase.from("leads").select("id").is("archived_at",null);
-  if(scope.ownerId)q=q.eq("owner_id",scope.ownerId);
+  if(scope.ownerId==="__UNASSIGNED__")q=q.is("owner_id",null);else if(scope.ownerId)q=q.eq("owner_id",scope.ownerId);
   if(scope.status==="__RECENT__")q=q.gte("created_at",new Date(Date.now()-7*86400000).toISOString());
   else if(scope.status)q=q.eq("status",scope.status);
   if(scope.countryGroup==="unset")q=q.is("country_group",null);

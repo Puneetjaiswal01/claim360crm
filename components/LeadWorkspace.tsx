@@ -19,8 +19,8 @@ type Props={
  recipient:string;onRecipient:(value:string)=>void;onTransfer:()=>void;onDelete:()=>void;
  contactAt:string|null;bodyRef:RefObject<HTMLDivElement|null>;
 };
-const STAGES=["NEW","UNTOUCHED","RINGING NOT RESPONDING","NOT REACHABLE","FOLLOW UP","VISIT","POTENTIAL","CLOSED","CONVERTED","INTERNATIONAL","LOSS","REMINING"];
-const labels:Record<string,string>={"NEW":"New","UNTOUCHED":"Untouched","RINGING NOT RESPONDING":"Ringing, no response","NOT REACHABLE":"Not reachable","FOLLOW UP":"Follow-up","VISIT":"Visit","POTENTIAL":"Potential","CLOSED":"Closed","CONVERTED":"Converted","INTERNATIONAL":"International","LOSS":"Lost","REMINING":"Remaining"};
+const STAGES=["UNASSIGNED","NEW","UNTOUCHED","RINGING NOT RESPONDING","NOT REACHABLE","FOLLOW UP","VISIT","POTENTIAL","CLOSED","CONVERTED","INTERNATIONAL","LOSS","REMINING"];
+const labels:Record<string,string>={"UNASSIGNED":"Unassigned","NEW":"New","UNTOUCHED":"Untouched","RINGING NOT RESPONDING":"Ringing, no response","NOT REACHABLE":"Not reachable","FOLLOW UP":"Follow-up","VISIT":"Visit","POTENTIAL":"Potential","CLOSED":"Closed","CONVERTED":"Converted","INTERNATIONAL":"International","LOSS":"Lost","REMINING":"Remaining"};
 const date=(value:string)=>{const d=new Date(value);return Number.isNaN(d.getTime())?"Date unavailable":d.toLocaleString("en-IN",{timeZone:"Asia/Kolkata",dateStyle:"medium",timeStyle:"short"})+" IST"};
 const basic=[["ref_id","Reference ID"],["shareholder_name","Shareholder name"],["company","Company"],["holding_value","Market / holding value"],["mobile_number","Phone number"],["mobile_number_type","Phone type"],["email","Email"],["lead_date","Lead date"]] as const;
 export default function LeadWorkspace(p:Props){

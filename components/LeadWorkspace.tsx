@@ -5,7 +5,7 @@ import ContactActions from "./ContactActions";
 import EmailComposer from "./EmailComposer";
 
 type Entry={at:string;note:string;actor_id?:string;kind?:string;field?:string;before?:string;after?:string};
-type WorkspaceLead={id:string;owner_id:string;shareholder_name:string;ref_id:string|null;company:string|null;mobile_number:string|null;email:string|null;registered_address:string|null;holding_value:string|null;created_at:string;updated_at:string;activities:Entry[]|null};
+type WorkspaceLead={id:string;owner_id:string|null;shareholder_name:string;ref_id:string|null;company:string|null;mobile_number:string|null;email:string|null;registered_address:string|null;holding_value:string|null;created_at:string;updated_at:string;activities:Entry[]|null};
 type Member={user_id:string;email:string;display_name?:string;designation?:string;role:string};
 type Form=Record<string,string|number|null>;
 type Props={
@@ -19,8 +19,8 @@ type Props={
  recipient:string;onRecipient:(value:string)=>void;onTransfer:()=>void;onDelete:()=>void;
  contactAt:string|null;bodyRef:RefObject<HTMLDivElement|null>;
 };
-const STAGES=["UNASSIGNED","NEW","UNTOUCHED","RINGING NOT RESPONDING","NOT REACHABLE","FOLLOW UP","VISIT","POTENTIAL","CLOSED","CONVERTED","INTERNATIONAL","LOSS","REMINING"];
-const labels:Record<string,string>={"UNASSIGNED":"Unassigned","NEW":"New","UNTOUCHED":"Untouched","RINGING NOT RESPONDING":"Ringing, no response","NOT REACHABLE":"Not reachable","FOLLOW UP":"Follow-up","VISIT":"Visit","POTENTIAL":"Potential","CLOSED":"Closed","CONVERTED":"Converted","INTERNATIONAL":"International","LOSS":"Lost","REMINING":"Remaining"};
+const STAGES=["NEW","UNTOUCHED","RINGING NOT RESPONDING","NOT REACHABLE","FOLLOW UP","VISIT","POTENTIAL","CLOSED","CONVERTED","INTERNATIONAL","LOSS","REMINING"];
+const labels:Record<string,string>={"NEW":"New","UNTOUCHED":"Untouched","RINGING NOT RESPONDING":"Ringing, no response","NOT REACHABLE":"Not reachable","FOLLOW UP":"Follow-up","VISIT":"Visit","POTENTIAL":"Potential","CLOSED":"Closed","CONVERTED":"Converted","INTERNATIONAL":"International","LOSS":"Lost","REMINING":"Remaining"};
 const date=(value:string)=>{const d=new Date(value);return Number.isNaN(d.getTime())?"Date unavailable":d.toLocaleString("en-IN",{timeZone:"Asia/Kolkata",dateStyle:"medium",timeStyle:"short"})+" IST"};
 const basic=[["ref_id","Reference ID"],["shareholder_name","Shareholder name"],["company","Company"],["holding_value","Market / holding value"],["mobile_number","Phone number"],["mobile_number_type","Phone type"],["email","Email"],["lead_date","Lead date"]] as const;
 export default function LeadWorkspace(p:Props){
@@ -32,7 +32,7 @@ export default function LeadWorkspace(p:Props){
  return <div className="modalBackdrop leadWorkspaceBackdrop"><section className="drawer drawerMaximized leadWorkspace" role="dialog" aria-modal="true" aria-label={p.lead?"Lead workspace":"Create lead workspace"}>
   <header className="leadWorkspaceHeader">
    <div className="leadWorkspaceTop"><button type="button" className="secondary" onClick={p.onClose} disabled={p.saving||p.navigationBusy}><ArrowLeft size={16}/> Back to leads</button><div className="leadWorkspacePaging"><span aria-live="polite">{p.navigationBusy?"Loading lead…":p.position}</span><button type="button" className="secondary" aria-label="Previous lead" onClick={p.onPrevious} disabled={p.previousDisabled||p.saving||p.navigationBusy}><ChevronLeft size={16}/><span>Previous</span></button><button type="button" className="secondary" aria-label="Next lead" onClick={p.onNext} disabled={p.nextDisabled||p.saving||p.navigationBusy}><span>Next</span><ChevronRight size={16}/></button></div></div>
-   <div className="leadWorkspaceIdentity"><div><div className="eyebrow">SHAREHOLDER WORKSPACE{p.lead?.ref_id?" / "+p.lead.ref_id:""}</div><h1>{p.lead?.shareholder_name||"Create a new lead"}</h1><p>{p.lead?.company||"Shareholder details, conversations and next actions"}</p></div><div className="leadWorkspaceBadges"><span className={"stage "+String(p.form.status||"").toLowerCase().replace(/\s+/g,"-")}>{labels[String(p.form.status)]||p.form.status}</span>{p.lead&&p.admin&&<div className="leadWorkspaceOwner" aria-label="Lead owner"><UserRound size={17}/><span><small>Assigned to</small><b>{owner?.display_name||owner?.email||"Former team member"}</b></span></div>}</div></div>
+   <div className="leadWorkspaceIdentity"><div><div className="eyebrow">SHAREHOLDER WORKSPACE{p.lead?.ref_id?" / "+p.lead.ref_id:""}</div><h1>{p.lead?.shareholder_name||"Create a new lead"}</h1><p>{p.lead?.company||"Shareholder details, conversations and next actions"}</p></div><div className="leadWorkspaceBadges"><span className={"stage "+String(p.form.status||"").toLowerCase().replace(/\s+/g,"-")}>{labels[String(p.form.status)]||p.form.status}</span>{p.lead&&p.admin&&<div className="leadWorkspaceOwner" aria-label="Lead owner"><UserRound size={17}/><span><small>Assigned to</small><b>{owner?.display_name||owner?.email||(p.lead?.owner_id?"Former team member":"Unassigned · Admin pool")}</b></span></div>}</div></div>
   </header>
   <nav className="leadWindowTabs workspaceTabs" aria-label="Lead sections">
    <button type="button" aria-pressed={p.tab==="details"} className={p.tab==="details"?"active":""} onClick={()=>p.onTab("details")}>General information</button>

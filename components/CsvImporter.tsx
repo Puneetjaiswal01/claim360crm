@@ -4,7 +4,7 @@ import {supabase} from "@/lib/supabase";
 import {UploadCloud,FileSpreadsheet,CheckCircle2,AlertTriangle} from "lucide-react";
 
 type CsvLead={owner_id:string;ref_id:string;shareholder_name:string;registered_address:string;company:string;holding_value:string;mobile_number:string;mobile_number_type:string;email:string;input_remarks:string;sales_remarks:string;status:string;lead_date:string|null;followup_date:string|null;fee_percent:number};
-const statusOptions=new Set(["NEW","UNTOUCHED","RINGING NOT RESPONDING","NOT REACHABLE","FOLLOW UP","VISIT","POTENTIAL","CLOSED","CONVERTED","INTERNATIONAL","LOSS","REMINING"]);
+const statusOptions=new Set(["UNASSIGNED","NEW","UNTOUCHED","RINGING NOT RESPONDING","NOT REACHABLE","FOLLOW UP","VISIT","POTENTIAL","CLOSED","CONVERTED","INTERNATIONAL","LOSS","REMINING"]);
 const aliases:Record<string,string>={
 "date":"lead_date","lead date":"lead_date","ref id":"ref_id","reference id":"ref_id","ref":"ref_id",
 "shareholder name(s)":"shareholder_name","shareholder name":"shareholder_name","shareholder":"shareholder_name",

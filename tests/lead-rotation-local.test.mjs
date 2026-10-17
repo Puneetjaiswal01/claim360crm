@@ -51,6 +51,10 @@ test("local rotation preserves history, excludes owners and rejects stale reques
   const unavailable=await(await rotate({p_lead_ids:["rnr"],p_expected_versions:{rnr:lead.updated_at}})).json();
   assert.equal(unavailable[0].message,"No other employee is available");
   assert.equal((await rotate({p_lead_ids:[],p_expected_versions:{}})).status,400);
+  await request("leads","POST",{id:"unassigned",shareholder_name:"Admin pool",owner_id:null,status:"COLD"});
+  const free=JSON.parse(await readFile(path.join(temporary,".local-dev/crm.json"),"utf8")).leads.find(l=>l.id==="unassigned");
+  const assigned=await(await rotate({p_lead_ids:[free.id],p_expected_versions:{[free.id]:free.updated_at}})).json();
+  assert.equal(assigned[0].rotated,true);assert.equal(assigned[0].previous_owner,null);assert.ok(assigned[0].new_owner);
   // Reviewed merges preserve the chosen record, original source, linked visits
   // and work. A stale review cannot merge and changed records cannot be undone.
   await request("leads","POST",[{id:"merge-target",shareholder_name:"Same Person",company:"Example Ltd",holding_value:"1000",status:"POTENTIAL",sales_remarks:"Target work"},{id:"merge-source",shareholder_name:"Same Person",company:"Example Limited",holding_value:"2000",status:"COLD",sales_remarks:"Source work",mobile_number:"9876543210",activities:[{at:version,actor_id:a,kind:"comment",note:"Earlier employee work"}]}]);

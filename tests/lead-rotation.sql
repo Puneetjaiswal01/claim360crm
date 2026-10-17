@@ -36,14 +36,15 @@ INSERT INTO public.leads(id,owner_id,status,sales_remarks) VALUES
  ('10000000-0000-4000-8000-000000000001','00000000-0000-4000-8000-000000000002','RINGING NOT RESPONDING','Keep these notes'),
  ('10000000-0000-4000-8000-000000000002','00000000-0000-4000-8000-000000000002','COLD','Keep cold notes'),
  ('10000000-0000-4000-8000-000000000003','00000000-0000-4000-8000-000000000002','POTENTIAL','Keep potential'),
- ('10000000-0000-4000-8000-000000000004','00000000-0000-4000-8000-000000000002','COLD','Archived');
+ ('10000000-0000-4000-8000-000000000004','00000000-0000-4000-8000-000000000002','COLD','Archived'),
+ ('10000000-0000-4000-8000-000000000005',NULL,'COLD','Unassigned admin pool');
 UPDATE public.leads SET archived_at=now() WHERE sales_remarks='Archived';
 \ir ../docs/crm_lead_rotation.sql
 \ir ../docs/crm_lead_rotation.sql
 CREATE FUNCTION pg_temp.check_result(ok boolean,label text) RETURNS void LANGUAGE plpgsql AS $$ BEGIN IF NOT coalesce(ok,false) THEN RAISE EXCEPTION 'FAILED: %',label; END IF; END $$;
-SELECT pg_temp.check_result((SELECT count(*)=4 FROM public.crm_lead_assignments),'idempotent assignment backfill');
+SELECT pg_temp.check_result((SELECT count(*)=5 FROM public.crm_lead_assignments),'idempotent assignment backfill includes unassigned leads');
 SELECT set_config('request.test_user','00000000-0000-4000-8000-000000000001',false);
-SELECT pg_temp.check_result(jsonb_array_length(public.crm_export_backup()->'tables'->'crm_lead_assignments')=4,'assignment history included in backups');
+SELECT pg_temp.check_result(jsonb_array_length(public.crm_export_backup()->'tables'->'crm_lead_assignments')=5,'assignment history included in backups');
 CREATE TEMP TABLE versions AS SELECT jsonb_object_agg(id,updated_at) AS value FROM public.leads;
 SET ROLE authenticated;
 CREATE TEMP TABLE rotated AS SELECT * FROM public.crm_rotate_leads(
@@ -69,6 +70,7 @@ RESET ROLE;
 UPDATE public.crm_team_members SET role='admin' WHERE user_id IN ('00000000-0000-4000-8000-000000000002','00000000-0000-4000-8000-000000000003');
 SET ROLE authenticated;
 SELECT pg_temp.check_result((SELECT NOT rotated AND message='No other employee is available' FROM public.crm_rotate_leads(ARRAY['10000000-0000-4000-8000-000000000001']::uuid[],(SELECT jsonb_object_agg(id,updated_at) FROM public.leads))),'no alternative leaves ownership unchanged');
+SELECT pg_temp.check_result((SELECT rotated AND previous_owner IS NULL AND new_owner IS NOT NULL FROM public.crm_rotate_leads(ARRAY['10000000-0000-4000-8000-000000000005']::uuid[],(SELECT jsonb_object_agg(id,updated_at) FROM public.leads))),'unassigned admin-pool leads can rotate to an employee');
 RESET ROLE;
 SELECT set_config('request.test_user','00000000-0000-4000-8000-000000000004',false);
 SET ROLE authenticated;

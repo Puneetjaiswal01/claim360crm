@@ -48,7 +48,7 @@ export function buildLeadActions(data:ReportData):LeadAction[]{
   const key=a.lead_id+"|"+a.from_owner_id+"|"+a.to_owner_id,times=assignmentTimes.get(key)||[];times.push(Date.parse(a.assigned_at));
   times.push(...(assignmentAuditAt.get(a.id)||[]));
   assignmentTimes.set(key,times);
-  add("assignment-"+a.id,a.lead_id,a.actor_id,a.assigned_at,a.reason==="Rotation"?"Lead rotated":"Lead transferred",(a.from_owner_name||a.from_owner_id||"Unassigned")+" → "+(a.to_owner_name||a.to_owner_id));
+  add("assignment-"+a.id,a.lead_id,a.actor_id,a.assigned_at,a.reason==="Rotation"?"Lead rotated":"Lead transferred",(a.from_owner_name||a.from_owner_id||"Unassigned")+" → "+(a.to_owner_name||a.to_owner_id||"Unassigned admin pool"));
  }
  const mergeSideEffects=new Set<string>();
  for(const m of data.merges){

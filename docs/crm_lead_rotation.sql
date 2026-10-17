@@ -4,12 +4,14 @@ BEGIN;
 CREATE TABLE IF NOT EXISTS public.crm_lead_assignments (
  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
  lead_id uuid NOT NULL REFERENCES public.leads(id) ON DELETE CASCADE,
- from_owner_id uuid, to_owner_id uuid NOT NULL, actor_id uuid,
+ from_owner_id uuid, to_owner_id uuid, actor_id uuid,
  from_owner_name text, to_owner_name text, actor_name text,
  assigned_at timestamptz NOT NULL DEFAULT clock_timestamp(),
  status text, reason text NOT NULL
 );
 CREATE INDEX IF NOT EXISTS crm_assignment_lead_date_idx ON public.crm_lead_assignments(lead_id,assigned_at DESC);
+-- Unassigned leads belong to the admin pool and legitimately have no owner.
+ALTER TABLE public.crm_lead_assignments ALTER COLUMN to_owner_id DROP NOT NULL;
 ALTER TABLE public.crm_lead_assignments ENABLE ROW LEVEL SECURITY;
 REVOKE ALL ON public.crm_lead_assignments FROM PUBLIC,anon,authenticated;
 GRANT SELECT ON public.crm_lead_assignments TO authenticated;
@@ -82,7 +84,7 @@ BEGIN
   -- Choose the agent with the fewest assignments in this batch, then the
   -- lightest active portfolio. The current owner is always excluded.
   SELECT m.user_id INTO recipient FROM public.crm_team_members m
-  WHERE m.role='agent' AND m.user_id<>lead.owner_id
+  WHERE m.role='agent' AND m.user_id IS DISTINCT FROM lead.owner_id
   ORDER BY (SELECT count(*) FROM public.crm_lead_assignments a WHERE a.to_owner_id=m.user_id AND a.reason='Rotation' AND a.assigned_at>=transaction_timestamp()),
    (SELECT count(*) FROM public.leads l WHERE l.owner_id=m.user_id AND l.archived_at IS NULL),m.user_id LIMIT 1;
   IF recipient IS NULL THEN message:='No other employee is available'; RETURN NEXT; CONTINUE; END IF;

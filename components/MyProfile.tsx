@@ -2,6 +2,7 @@
 import {useEffect,useState} from "react";
 import {Save,UserRound,ShieldCheck} from "lucide-react";
 import {supabase} from "@/lib/supabase";
+import {ListSkeleton} from "./LoadingStates";
 type Details={display_name:string;designation:string;employee_id:string;phone:string;department:string};
 type Props={userId:string;email:string;name?:string;designation?:string;role?:string;adminEdit?:boolean;onSaved:()=>Promise<void>};
 const columns="display_name,designation,employee_id,phone,department,completed_at";
@@ -29,20 +30,21 @@ export default function MyProfile({userId,email,name,designation,role,adminEdit=
    setExists(true);setCompleted(true);await onSaved();
   }catch{setError("Could not connect. Please try again.");}finally{setBusy(false);}
  }
+ const locked=completed&&!adminEdit;
  return <section className="tableCard myProfileCard" aria-labelledby="myProfileTitle">
-  <div className="myProfileHeader"><div className="myProfileAvatar"><UserRound size={25}/></div><div><h2 id="myProfileTitle">{adminEdit?"Employee profile":"Your employee profile"}</h2><p>{adminEdit?"Update this team member’s details.":"Complete your details once. An administrator will manage future changes."}</p></div></div>
+  <div className="myProfileHeader"><div className="myProfileAvatar"><UserRound size={25}/></div><div><h2 id="myProfileTitle">{adminEdit?"Employee profile":"Your employee profile"}</h2><p>{adminEdit?"Update this team member’s details.":locked?"Your account details and workspace access.":"Complete your details once. An administrator will manage future changes."}</p></div></div>
   {error&&<div className="alert" role="alert">{error}</div>}
-  {loading?<p role="status">Loading your profile…</p>:completed&&!adminEdit?<p role="status">Your profile setup is complete. Contact an administrator to change these details.</p>:<form onSubmit={save}>
+  {loading?<ListSkeleton label="Loading employee profile" rows={2}/>:<form onSubmit={save}>
    <fieldset disabled={busy}><legend className="srOnly">Employee details</legend><div className="formGrid">
-    <label>Full name<input autoComplete="name" required maxLength={100} value={form.display_name} onChange={e=>change("display_name",e.target.value)}/></label>
-    <label>Employee ID<input maxLength={40} title="Use letters, numbers, dots, slashes, underscores or hyphens." placeholder="Enter your assigned employee ID" value={form.employee_id} onChange={e=>change("employee_id",e.target.value)}/></label>
-    <label>Job title<input autoComplete="organization-title" maxLength={100} value={form.designation} onChange={e=>change("designation",e.target.value)}/></label>
-    <label>Department<input maxLength={100} placeholder="e.g. Business Development" value={form.department} onChange={e=>change("department",e.target.value)}/></label>
-    <label>Phone number<input type="tel" autoComplete="tel" maxLength={30} value={form.phone} onChange={e=>change("phone",e.target.value)}/></label>
+    <label>Full name<input readOnly={locked} autoComplete="name" required maxLength={100} value={form.display_name} onChange={e=>change("display_name",e.target.value)}/></label>
+    <label>Employee ID<input readOnly={locked} maxLength={40} title="Use letters, numbers, dots, slashes, underscores or hyphens." placeholder="Enter your assigned employee ID" value={form.employee_id} onChange={e=>change("employee_id",e.target.value)}/></label>
+    <label>Job title<input readOnly={locked} autoComplete="organization-title" maxLength={100} value={form.designation} onChange={e=>change("designation",e.target.value)}/></label>
+    <label>Department<input readOnly={locked} maxLength={100} placeholder="e.g. Business Development" value={form.department} onChange={e=>change("department",e.target.value)}/></label>
+    <label>Phone number<input readOnly={locked} type="tel" autoComplete="tel" maxLength={30} value={form.phone} onChange={e=>change("phone",e.target.value)}/></label>
     <label>Work email<input type="email" readOnly value={email}/></label>
    </div></fieldset>
    <div className="myProfileAccess"><ShieldCheck size={18}/><span>CRM access: <b>{role==="admin"?"Administrator":role==="manager"?"Manager":"Team member"}</b>. Account email and permissions are managed separately.</span></div>
-   <div className="myProfileFooter"><p role="status" aria-live="polite">{message||(adminEdit?"Administrator editing employee details.":"After saving, only an administrator can change your details.")}</p><button type="submit" className="primary" disabled={busy}><Save size={16}/>{busy?"Saving…":adminEdit?"Save changes":"Complete profile"}</button></div>
+   <div className="myProfileFooter"><p role="status" aria-live="polite">{message||(locked?"Your profile is complete. Contact an administrator to update these details.":adminEdit?"Administrator editing employee details.":"After saving, only an administrator can change your details.")}</p>{!locked&&<button type="submit" className="primary" disabled={busy}><Save size={16}/>{busy?"Saving…":adminEdit?"Save changes":"Complete profile"}</button>}</div>
   </form>}
  </section>;
 }

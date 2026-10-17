@@ -1,11 +1,12 @@
 "use client";
 import {useEffect,useRef,useState} from "react";
-import {supabase} from "@/lib/supabase";
+import {supabase,localDevelopment} from "@/lib/supabase";
 export default function useLeadRealtime(userId:string|undefined,onRefresh:()=>void){
  const refresh=useRef(onRefresh);refresh.current=onRefresh;
  const [state,setState]=useState<"connecting"|"live"|"reconnecting">("connecting");
  useEffect(()=>{
   if(!userId)return;
+  if(localDevelopment){setState("live");return;}
   let closed=false,connected=false,pending:ReturnType<typeof setTimeout>|undefined;
   const schedule=()=>{if(closed||pending)return;pending=setTimeout(()=>{pending=undefined;if(!closed)refresh.current()},250)};
   const channel=supabase.channel("crm-leads-"+userId).on("postgres_changes",{event:"*",schema:"public",table:"leads"},schedule).subscribe(status=>{

@@ -1,7 +1,8 @@
 "use client";
 import {useEffect,useRef,useState} from "react";
 import {createPortal} from "react-dom";
-import {Clock,Palette,X} from "lucide-react";
+import {Clock,X} from "lucide-react";
+import SegmentedControl from "./arc/segmented-control/segmented-control";
 import {supabase} from "@/lib/supabase";
 
 type Usage={session_seconds:number;today_seconds:number;started_at:string;server_time:string};
@@ -80,8 +81,8 @@ export default function WorkspaceControls({userId}:{userId:string}){
  },[historyOpen,userId]);
  const openHistory=()=>{setHistory([]);setHistoryOpen(true);setHistoryError("");};
  return <div className="workspaceControls">
-  <label className="themeControl"><Palette size={15}/><span className="srOnly">CRM theme</span><select aria-label="CRM theme" value={theme} onChange={e=>changeTheme(e.target.value)}><option value="color">Original color</option><option value="dark">Dark</option></select></label>
-  <button type="button" className="usageControl" onClick={()=>void openHistory()} title="View your login hours"><Clock size={16}/><span><b>Today {usage?duration(Number(usage.today_seconds)+delta):"—"}</b><small>Active {duration(activeToday+activeDelta)}{idle?" · Paused":""}</small><small>IST · {status}</small></span></button>
+  <div className="appearanceSwitch"><SegmentedControl label="CRM appearance" value={theme} onValueChange={changeTheme} options={[{value:"color",label:"Light"},{value:"dark",label:"Dark"}]}/></div>
+  <button type="button" className="usageControl" onClick={()=>void openHistory()} title="View your login hours" aria-label="View your login hours"><Clock size={16}/><span><b>Today {usage?duration(Number(usage.today_seconds)+delta):"—"}</b><small>Active {duration(activeToday+activeDelta)}{idle?" · Paused":""}</small><small>IST · {status}</small></span></button>
   {historyOpen&&createPortal(<div className="usageBackdrop" onMouseDown={e=>{if(e.target===e.currentTarget)setHistoryOpen(false)}}><section ref={historyRef} className="usageHistory" role="dialog" aria-modal="true" aria-labelledby="usageHistoryTitle" aria-describedby="usageHistoryExplanation"><header><div><h2 id="usageHistoryTitle">Your login hours</h2><p>Daily totals · Asia/Kolkata · Last 30 days</p></div><button ref={historyCloseRef} type="button" className="iconButton" aria-label="Close login hours" onClick={()=>setHistoryOpen(false)}><X size={20}/></button></header><div className="usageHistoryContent" tabIndex={0} role="region" aria-label="Daily login hours"><p id="usageHistoryExplanation" className="usageExplanation">One total per date, updated every 30 seconds. Open hours combine all tabs without double-counting. Active hours pause after five minutes without interaction. Days use India Standard Time (IST).</p>{historyError?<p role="alert">{historyError}</p>:<div className="usageTable"><table><thead><tr><th>Date (IST)</th><th>Open hours</th><th>Active hours</th></tr></thead><tbody>{history.map(row=><tr key={row.day}><td>{new Date(row.day+"T12:00:00+05:30").toLocaleDateString("en-IN",{timeZone:"Asia/Kolkata",dateStyle:"medium"})}</td><td>{duration(Number(row.open_seconds))}</td><td>{duration(Number(row.active_seconds))}</td></tr>)}</tbody></table>{historyLoading&&!history.length?<p role="status">Loading daily hours…</p>:!history.length&&<p>No daily usage records yet.</p>}</div>}</div></section></div>,document.body)}
  </div>;
 }

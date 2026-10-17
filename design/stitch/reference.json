@@ -1,0 +1,20 @@
+{
+  "provider": "Google Stitch",
+  "projectId": "14525852671690973860",
+  "screens": {
+    "dashboard": "3741b0ab0605427fb565fd9de901f3ab",
+    "login": "312b2028a74b4f41b8df91d446069bb8",
+    "ui-system": "1991b0aa23f949e3b8bcca2aa8b68bc1",
+    "lead-workspace": "7015d78c5c8d480ca01552da1b8c7d96"
+  },
+  "implementation": {
+    "theme": "app/design-system.css",
+    "signIn": "components/SignInScreen.tsx",
+    "dashboard": "components/DashboardInsights.tsx",
+    "team": "components/TeamDirectory.tsx",
+    "import": "components/CsvImporter.tsx",
+    "profile": "components/MyProfile.tsx",
+    "lead-workspace": "components/LeadWorkspace.tsx"
+  },
+  "notes": "Use the design for visual guidance. Illustrative counts, records, financial amounts, compliance claims and unimplemented controls from generated HTML are not application data or behavior."
+}

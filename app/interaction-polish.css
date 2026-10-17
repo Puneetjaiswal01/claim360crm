@@ -1,0 +1,90 @@
+/* Arc's semantic variables map to Claim 360's existing light/dark design system. */
+:root{
+ --surface:var(--crm-surface);--surface-muted:var(--design-subtle);--foreground:var(--crm-ink);
+ --text-muted:var(--design-text);--border:var(--crm-border);--border-subtle:var(--crm-border);
+ --border-strong:color-mix(in srgb,var(--crm-muted) 38%,var(--crm-border));
+ --font-display:var(--font-heading);--text-3xl:36px;--text-sm:13px;--text-xs:11px;
+ --tracking-display:-.035em;--tracking-body:0;--leading-body:1.6;
+ --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;
+ --radius-control:10px;--radius-panel:16px;--radius-pill:999px;
+ --control-height-sm:30px;--control-height-md:38px;
+ --shadow-resting:0 1px 4px #132a3408;--shadow-floating:0 20px 70px #0c242e24;
+ --duration-fast:160ms;--ease-standard:cubic-bezier(.22,1,.36,1);--ease-in-out:cubic-bezier(.65,0,.35,1);
+}
+.metricValue{display:inline-flex;align-items:center;min-height:1.16em;--text-3xl:1em}
+.metricValue>span{font-family:inherit;font-size:inherit;font-weight:inherit}
+.metricPlaceholder{display:inline-flex;align-items:center;width:96px;height:36px}
+.metricPlaceholder>div{width:100%}
+.inlineSpinner{flex-shrink:0;animation:busy-turn .9s linear infinite}
+@keyframes busy-turn{to{transform:rotate(360deg)}}
+.sidebar nav button{isolation:isolate}
+.sidebar nav button.active{background:transparent;box-shadow:none}
+.sidebar nav button>.navigationHighlight{position:absolute;inset:0;z-index:-1;border:1px solid #6caa911c;border-radius:inherit;background:#254c46;pointer-events:none}
+.sidebar nav button>.navItemLabel,.sidebar nav button>svg,.sidebar nav button>.navItemCount{position:relative;z-index:1}
+html[data-crm-theme="dark"] .sidebar nav button.active{background:transparent;box-shadow:none}
+html[data-crm-theme="dark"] .navigationHighlight{background:#294c45}
+.appearanceSwitch{display:inline-flex;min-width:0;--text-sm:12px;--control-height-sm:28px;--radius-control:9px}
+.appearanceSwitch button{line-height:1.4}
+.commandTrigger{display:flex;align-items:center;gap:9px;min-height:37px;padding:8px 11px;border:1px solid var(--crm-border);border-radius:9px;background:var(--design-subtle);color:var(--design-text);font-size:12px;line-height:1.4;text-align:left;white-space:nowrap}
+.commandTrigger:hover{border-color:#91b7aa;background:var(--crm-surface);color:var(--design-accent)}
+.commandTrigger>svg{flex-shrink:0}
+.commandTrigger kbd{margin-left:13px;padding:2px 4px;border:1px solid var(--crm-border);border-radius:4px;background:var(--crm-surface);font:inherit;font-size:9px;color:var(--design-text)}
+.commandDialog{width:min(640px,calc(100vw - 32px));max-height:calc(100dvh - 40px);margin:min(15vh,120px) auto auto;padding:0;border:0;border-radius:16px;background:transparent;color:var(--crm-ink);overflow:visible;outline:0}
+.commandDialog::backdrop{background:#0a1e2a66;backdrop-filter:blur(5px)}
+.commandDialog[open]::backdrop{animation:backdrop-in .16s ease-out}
+@keyframes backdrop-in{from{opacity:0}to{opacity:1}}
+.commandDialog>div:first-child{border-bottom-left-radius:0;border-bottom-right-radius:0;box-shadow:0 20px 70px #0c242e24}
+.commandDialog input,.commandDialog input:focus{background:transparent!important;box-shadow:none!important;border:0!important}
+.commandDialog input:focus-visible{outline:0}
+.commandDialog [role=option]{min-height:43px}
+.commandDialog [role=option] strong{font-size:13px;font-weight:550}
+.commandDialog [role=option] small{font-size:11px}
+.commandFooter{display:flex;align-items:center;gap:18px;padding:12px 17px;border:1px solid var(--crm-border);border-top:0;border-radius:0 0 16px 16px;background:var(--design-subtle);font-size:10px;color:var(--design-text)}
+.commandFooter>span{display:flex;align-items:center;gap:5px}
+.commandFooter kbd{padding:1px 4px;border:1px solid var(--crm-border);border-radius:4px;background:var(--crm-surface);font:inherit;font-size:10px;line-height:1.5}
+.listSkeleton{padding:5px 26px 12px;min-width:0}
+.listSkeletonRow{display:grid;grid-template-columns:minmax(0,2fr) minmax(70px,1fr) minmax(60px,.8fr);align-items:center;gap:35px;padding:23px 0;border-bottom:1px solid var(--crm-border);min-height:82px}
+.listSkeletonRow:last-child{border:0}
+.skeletonColumn{display:block;min-width:0}
+.workspaceLoading{display:flex;min-height:100svh;background:var(--crm-bg);color:var(--crm-ink)}
+.workspaceLoading>aside{flex:0 0 256px;padding:28px 25px;background:#132a34;--surface:#132a34;--border-strong:#53727e}
+.workspaceLoading>aside>img{display:block;width:44px;height:44px;background:#fff;border-radius:11px;margin-bottom:45px}
+.loadingNavItems{display:grid;gap:28px}
+.workspaceLoading>section{flex:1;min-width:0}
+.workspaceLoading header{display:flex;align-items:center;justify-content:space-between;height:76px;padding:0 36px;background:var(--crm-surface);border-bottom:1px solid var(--crm-border);font-size:13px;font-weight:550}
+.workspaceLoading header svg{color:var(--design-accent)}
+.loadingCanvas{padding:40px 36px}
+.loadingCanvas>div:first-child{max-width:400px}
+.loadingMetricGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;margin:38px 0 24px}
+.loadingMetricGrid>div{padding:25px;min-height:164px;border:1px solid var(--crm-border);border-radius:14px;background:var(--crm-surface)}
+.loadingTable{padding:28px;min-height:285px;border:1px solid var(--crm-border);border-radius:14px;background:var(--crm-surface)}
+.loadingTable>div{max-width:650px}
+.isRefreshing{position:relative}
+.isRefreshing table{opacity:.52;transition:opacity .14s}
+.queueList.isRefreshing>.queueItem{opacity:.52}
+.isRefreshing::after{content:"";position:absolute;top:0;left:0;height:2px;width:100%;background:linear-gradient(90deg,transparent,var(--design-accent),transparent) no-repeat;background-size:30% 100%;animation:refresh-travel 1.25s ease-in-out infinite;pointer-events:none}
+@keyframes refresh-travel{from{background-position:-45% 0}to{background-position:145% 0}}
+.primary,.secondary,.quiet,.danger,.signinSubmit{transition:background-color .16s,border-color .16s,box-shadow .16s,transform .16s}
+.primary:active:not(:disabled),.secondary:active:not(:disabled),.signinSubmit:active:not(:disabled){transform:translateY(1px) scale(.985)}
+.signinSubmit>svg:last-child{transition:transform .2s var(--ease-standard)}
+.signinSubmit:hover:not(:disabled)>svg:last-child:not(.inlineSpinner){transform:translateX(3px)}
+.signinFormWrap{animation:form-arrive .38s var(--ease-standard) both}
+@keyframes form-arrive{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.leadWorkspaceHeader{animation:editor-arrive .2s var(--ease-standard)}
+@keyframes editor-arrive{from{opacity:.6;transform:translateY(5px)}to{opacity:1;transform:none}}
+.workspaceFeedback{display:flex;align-items:center;gap:9px;animation:feedback-arrive .2s var(--ease-standard)}
+.workspaceFeedback svg{flex-shrink:0}
+@keyframes feedback-arrive{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.teamMemberCard{transition:border-color .18s,box-shadow .18s}
+.teamMemberCard:hover{border-color:#b3cfc3;box-shadow:0 7px 24px #193e3007}
+.teamDashboardLink svg{transition:transform .18s var(--ease-standard)}
+.teamDashboardLink:hover svg{transform:translate(2px,-2px)}
+.importDropzone{transition:background-color .18s,border-color .18s,box-shadow .18s}
+.importDropzone:focus-within{box-shadow:var(--ui-focus)}
+@media(min-width:1600px){.commandTrigger{min-width:190px}}
+@media(max-width:1450px){.topRole{display:none}.commandTrigger>span,.commandTrigger>kbd{display:none}.commandTrigger{width:36px;height:37px;min-width:0;justify-content:center;padding:8px}}
+@media(max-width:1100px){.loadingMetricGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:850px){.workspaceLoading>aside{display:none}.workspaceLoading header{height:70px;padding:0 20px}.loadingCanvas{padding:30px 20px}.listSkeleton{padding:4px 20px 10px}.listSkeletonRow{gap:20px}.commandDialog{margin-top:90px}}
+@media(max-width:560px){.topbar{gap:8px}.topActions,.topbar .workspaceControls{gap:5px}.appearanceSwitch{--control-height-sm:26px;--text-sm:11px;--radius-control:8px}.appearanceSwitch button{padding:0 6px;font-size:11px}.commandTrigger{width:32px;height:36px;min-height:36px;padding:7px}.commandTrigger>svg{width:15px}.commandDialog{width:calc(100vw - 24px);margin:80px auto auto;max-height:calc(100dvh - 100px)}.commandDialog input{font-size:16px}.commandFooter{gap:12px;padding:12px;font-size:10px}.commandDialog [role=option]{min-height:45px}.listSkeletonRow{grid-template-columns:minmax(0,1fr) 65px;gap:20px;padding:22px 0}.listSkeletonRow .skeletonColumn:last-child{display:none}.loadingCanvas{padding:28px 18px}.loadingMetricGrid{gap:12px;margin-top:30px}.loadingMetricGrid>div{padding:20px 16px;min-height:150px}.workspaceLoading header{height:65px;padding:0 18px}.loadingTable{padding:24px 20px}.metricPlaceholder{width:80px}}
+@media(max-width:370px){.topActions,.topbar .workspaceControls{gap:4px}.appearanceSwitch button{padding:0 5px}.commandFooter>span:last-child{margin-left:auto}.commandFooter{gap:9px}.commandDialog [role=option] small{display:none}}
+@media(prefers-reduced-motion:reduce){.inlineSpinner,.signinFormWrap,.leadWorkspaceHeader,.workspaceFeedback,.isRefreshing::after,.commandDialog[open]::backdrop{animation:none!important}.isRefreshing::after{left:0;width:100%;background:var(--design-accent)}.primary:active:not(:disabled),.secondary:active:not(:disabled),.signinSubmit:active:not(:disabled),.signinSubmit:hover:not(:disabled)>svg:last-child,.teamDashboardLink:hover svg{transform:none!important}.primary,.secondary,.quiet,.danger,.signinSubmit,.teamMemberCard,.importDropzone,.teamDashboardLink svg,.isRefreshing table{transition:none!important}}

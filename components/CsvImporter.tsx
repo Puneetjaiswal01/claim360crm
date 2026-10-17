@@ -1,10 +1,11 @@
 "use client";
 import {useState} from "react";
+import {InlineSpinner} from "./LoadingStates";
 import {supabase} from "@/lib/supabase";
 import {UploadCloud,FileSpreadsheet,CheckCircle2,AlertTriangle} from "lucide-react";
 
 type CsvLead={owner_id:string;ref_id:string;shareholder_name:string;registered_address:string;company:string;holding_value:string;mobile_number:string;mobile_number_type:string;email:string;input_remarks:string;sales_remarks:string;status:string;lead_date:string|null;followup_date:string|null;fee_percent:number};
-const statusOptions=new Set(["NEW","UNTOUCHED","RINGING NOT RESPONDING","NOT REACHABLE","FOLLOW UP","VISIT","POTENTIAL","CLOSED","CONVERTED","INTERNATIONAL","LOSS","REMINING"]);
+const statusOptions=new Set(["NEW","UNTOUCHED","RINGING NOT RESPONDING","COLD","NOT REACHABLE","FOLLOW UP","VISIT","POTENTIAL","CLOSED","CONVERTED","INTERNATIONAL","LOSS","REMINING"]);
 const aliases:Record<string,string>={
 "date":"lead_date","lead date":"lead_date","ref id":"ref_id","reference id":"ref_id","ref":"ref_id",
 "shareholder name(s)":"shareholder_name","shareholder name":"shareholder_name","shareholder":"shareholder_name",
@@ -48,13 +49,19 @@ export default function CsvImporter({userId,onImported}:{userId:string;onImporte
  const upload=async()=>{if(!rows.length||busy)return;setBusy(true);setMessage("");setProgress(0);let completed=0;
  for(let i=0;i<rows.length;i+=100){const batch=rows.slice(i,i+100);const {error}=await supabase.from("leads").insert(batch);if(error){setMessage("Import stopped at row "+(i+1)+": "+error.message+". Earlier batches may have been saved. Re-uploading will create duplicates.");setBusy(false);await onImported();return}completed+=batch.length;setProgress(completed)}
  setBusy(false);setMessage("Import finished: "+completed+" valid rows processed. Duplicate references were retained as separate leads.");setRows([]);await onImported()};
- return <section className="tableCard" style={{padding:25,marginBottom:24}}>
- <div style={{display:"flex",alignItems:"center",gap:12}}><div className="metricIcon indigo" style={{margin:0}}><FileSpreadsheet size={21}/></div><div><h2 style={{margin:"0 0 5px"}}>Import shareholder leads from CSV</h2><p className="metricHint">Upload your spreadsheet as CSV. New records are saved directly to Supabase.</p></div></div>
- <button className="secondary" style={{marginTop:14}} onClick={()=>{const csv="Ref ID,Shareholder Name(s),Registered Address,Company,Holding Value,Mobile Number,Mobile Number Type,Email,Input Remarks,Sales Remarks,Status,Date,Follow-up Date\\r\\n";const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download="claim360-import-template.csv";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}}>Download CSV template</button><label style={{display:"block",border:"2px dashed #cdd8ed",borderRadius:12,padding:25,marginTop:22,textAlign:"center",cursor:"pointer",background:"#f9fbff"}}>
- <UploadCloud size={27} style={{display:"block",margin:"0 auto 10px",color:"#4867ce"}}/><b>{fileName||"Choose a CSV file to import"}</b><p className="metricHint">Supports your existing 12-column Claim 360 format, quoted commas and multi-line remarks · Max 10 MB</p>
- <input type="file" accept=".csv,text/csv" style={{display:"block",margin:"12px auto 0",maxWidth:"100%"}} disabled={busy} onChange={e=>readFile(e.target.files?.[0])}/></label>
- {issues.map((issue,i)=><p key={i} style={{color:"#a56b28",fontSize:12}}><AlertTriangle size={13} style={{verticalAlign:"middle"}}/> {issue}</p>)}
- {rows.length>0&&<div style={{marginTop:20}}><b>{rows.length.toLocaleString("en-IN")} valid leads ready</b><p className="metricHint">Preview: {rows.slice(0,3).map(r=>r.shareholder_name).join(" · ")}. Duplicate names and reference IDs will be imported as separate leads.</p><button className="primary" disabled={busy} onClick={upload}><UploadCloud size={16}/>{busy?"Uploading "+progress+" / "+rows.length:"Import "+rows.length+" leads to database"}</button></div>}
- {message&&<p style={{color:message.startsWith("Import finished")?"#258454":"#b33b4a",marginTop:15}}><CheckCircle2 size={15} style={{verticalAlign:"middle"}}/> {message}</p>}
- </section>
+
+ const finished=message.startsWith("Import finished");
+ const downloadTemplate=()=>{const csv="Ref ID,Shareholder Name(s),Registered Address,Company,Holding Value,Mobile Number,Mobile Number Type,Email,Input Remarks,Sales Remarks,Status,Date,Follow-up Date\r\n";const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));const link=document.createElement("a");link.href=url;link.download="claim360-import-template.csv";link.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+ return <div className="importLayout">
+  <section className="tableCard importCard">
+   <header className="importCardHeader"><div><span className="sectionEyebrow">GROW YOUR PIPELINE</span><h2>Bring your records together</h2><p>Import a CSV of shareholder records into your active workspace.</p></div></header>
+   <ol className="importSteps" aria-label="Import progress">{["Choose a file","Review records","Import records"].map((label,index)=>{const current=finished?2:rows.length?1:0;return <li key={label} className={index<=current?"active":""} aria-current={index===current?"step":undefined}><span>{index<current||finished?<CheckCircle2 size={14}/>:index+1}</span>{label}</li>})}</ol>
+   <label className="importDropzone" onDragOver={event=>event.preventDefault()} onDrop={event=>{event.preventDefault();if(!busy)void readFile(event.dataTransfer.files[0])}}><span className="importDropIcon"><UploadCloud size={27}/></span><strong>{fileName||"Drop your CSV here"}</strong><small>{fileName?"Choose another file to replace this selection.":"Keep all your shareholder details, remarks, and lead statuses together."}</small><span className="importBrowseLink">{fileName?"Choose another file":"or browse files on your computer"}</span><small>CSV format, up to 10 MB</small><input className="srOnly" aria-label="Choose shareholder CSV" type="file" accept=".csv,text/csv" disabled={busy} onChange={event=>void readFile(event.target.files?.[0])}/></label>
+   <div className="importTemplate"><span>Start with the right column names.</span><button className="secondary" onClick={downloadTemplate}><FileSpreadsheet size={16}/> Download template</button></div>
+   {issues.map((issue,index)=><p key={index} className="importWarning" role="alert"><AlertTriangle size={16}/><span>{issue}</span></p>)}
+   {rows.length>0&&<section className="importReview"><h3><CheckCircle2 size={19}/>{rows.length.toLocaleString("en-IN")} records ready</h3><p>Preview: {rows.slice(0,3).map(row=>row.shareholder_name).join(", ")}. Review your file before importing. Duplicate names and references are retained as separate leads.</p><button className="primary" disabled={busy} onClick={upload} aria-busy={busy}>{busy?<InlineSpinner/>:<UploadCloud size={16}/>}{busy?"Importing "+progress+" / "+rows.length:"Import "+rows.length.toLocaleString("en-IN")+" records"}</button>{busy&&<div className="importProgress" role="progressbar" aria-label="CSV import progress" aria-valuemin={0} aria-valuemax={rows.length} aria-valuenow={progress}><span style={{width:Math.round(progress/rows.length*100)+"%"}}/></div>}</section>}
+   {message&&<div className={finished?"opsSuccess":"alert"} role="status" style={{marginTop:22}}>{message}</div>}
+  </section>
+  <aside className="tableCard importGuide"><h3>A smooth import starts here</h3><ul><li><strong>Use a CSV file</strong>Save your spreadsheet as CSV. Quoted commas and multi-line remarks are supported.</li><li><strong>Keep the required columns</strong>Include Shareholder Name and a recognized Status column. The template has the expected names.</li><li><strong>Check your statuses</strong>Use the CRM's lead stages so each shareholder stays in the right part of your pipeline.</li><li><strong>Review duplicates</strong>Imports add new records. Re-uploading a file can create duplicates.</li></ul></aside>
+ </div>;
 }

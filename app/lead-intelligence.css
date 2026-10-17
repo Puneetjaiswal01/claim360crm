@@ -1,0 +1,15 @@
+.reportStats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:20px 0}
+.reportStats>div{display:flex;flex-direction:column;gap:8px;padding:20px;border:1px solid var(--crm-border);border-radius:14px;min-width:0}
+.reportStats strong{font-size:clamp(18px,1.6vw,27px);overflow-wrap:anywhere;line-height:1.3}
+.reportStats span{font-size:12px;color:var(--crm-muted);line-height:1.5}
+.reportFilters{margin:20px 0;border:1px solid var(--crm-border);border-radius:14px;padding:18px}
+.leadReports h3{margin:24px 0 12px}.leadReports .opsHead h3{margin:0}.leadReports .opsHead{margin-top:22px}
+.leadReports .tableScroll{max-width:100%}.leadReports th{white-space:nowrap}.reportLeadRef{display:block;margin-top:5px;color:var(--crm-muted)}
+.reportActionDetail{min-width:240px;max-width:460px;white-space:pre-wrap;overflow-wrap:anywhere}
+.duplicatePair{border:1px solid var(--crm-border);border-radius:14px;padding:20px;margin:16px 0}
+.duplicatePairHeading{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}.duplicatePairHeading h3{margin:0 0 8px}.duplicatePairHeading span{font-size:12px;font-weight:600}
+.duplicateRecords{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:16px 0}.duplicateRecords>div{display:flex;flex-direction:column;gap:8px;padding:14px;background:var(--design-subtle);border-radius:10px;overflow-wrap:anywhere}.duplicateRecords span{font-size:12px}.duplicateRecords .quiet{align-self:flex-start}
+.duplicateConflicts{color:var(--design-warning,#a15c15);font-size:13px;line-height:1.6}
+.comparisonTable td{vertical-align:top}.comparisonTable pre{font-family:inherit;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere;max-width:350px;max-height:240px;overflow:auto;margin:0}
+@media(max-width:850px){.reportStats{grid-template-columns:repeat(2,minmax(0,1fr))}.duplicatePairHeading{flex-direction:column}.duplicateRecords{grid-template-columns:1fr}}
+@media(max-width:480px){.reportStats>div{padding:14px}.duplicatePair{padding:14px}.reportFilters{padding:12px}}
